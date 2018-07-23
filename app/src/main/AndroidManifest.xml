@@ -13,6 +13,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                     //호오 이렇게 하는건가욧?
+                //업데이트 푸쉬로 다시
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
