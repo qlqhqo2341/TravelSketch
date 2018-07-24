@@ -1,6 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ImageButton
+        android:id="@+id/imageButton2"
+        android:layout_width="126dp"
+        android:layout_height="134dp"
+        app:srcCompat="@drawable/sun"
+        tools:layout_editor_absoluteX="213dp"
+        tools:layout_editor_absoluteY="69dp"
+        tools:ignore="MissingConstraints" />
+
+    <ImageButton
+        android:id="@+id/imageButton3"
+        android:layout_width="126dp"
+        android:layout_height="134dp"
+        app:srcCompat="@drawable/sun"
+        tools:layout_editor_absoluteX="48dp"
+        tools:layout_editor_absoluteY="69dp"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="천안시/쌍용동"
+        tools:layout_editor_absoluteX="68dp"
+        tools:layout_editor_absoluteY="50dp"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="일본/오사카"
+        tools:layout_editor_absoluteX="245dp"
+        tools:layout_editor_absoluteY="50dp"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="7월 24일 화요일"
+        tools:layout_editor_absoluteX="48dp"
+        tools:layout_editor_absoluteY="211dp"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="오후 3 : 00"
+        tools:layout_editor_absoluteX="48dp"
+        tools:layout_editor_absoluteY="230dp"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="오후  3: 00"
+        tools:layout_editor_absoluteX="213dp"
+        tools:layout_editor_absoluteY="230dp"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="7월 24일 화요일"
+        tools:layout_editor_absoluteX="213dp"
+        tools:layout_editor_absoluteY="211dp"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="35ºC"
+        tools:layout_editor_absoluteX="120dp"
+        tools:layout_editor_absoluteY="230dp"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="37ºC"
+        tools:layout_editor_absoluteX="284dp"
+        tools:layout_editor_absoluteY="230dp"
+        tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="+여행추가"
+        tools:layout_editor_absoluteX="268dp"
+        tools:layout_editor_absoluteY="501dp"
+        tools:ignore="MissingConstraints" />
 </android.support.constraint.ConstraintLayout>
