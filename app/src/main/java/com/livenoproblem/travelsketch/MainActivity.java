@@ -9,5 +9,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //manageTravel액티비티로 넘어가기
+        //startActivity(new android.content.Intent(getApplicationContext(), manageTravel.class));
     }
 }
