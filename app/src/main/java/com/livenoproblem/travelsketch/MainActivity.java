@@ -71,9 +71,12 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
             }, MY_PERMISSION);
         }
+
+
         Location location = locationManager.getLastKnownLocation(provider);
         if (location == null)
-            Log.e("TAG","No Location");
+           Log.e("TAG","No Location");
+
     }
 
     @Override
@@ -171,14 +174,16 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             pd.dismiss();
 
             txtCity.setText(String.format("%s,%s",openWeatherMap.getName(),openWeatherMap.getSys().getCountry()));
-            txtLastUpdate.setText(String.format("최근 업데이트: %s", Common.getDateNow()));
+            txtLastUpdate.setText(String.format("업데이트됨: %s", Common.getDateNow()));
             txtDescription.setText(String.format("%s",openWeatherMap.getWeather().get(0).getDescription()));
             txtHumidity.setText(String.format("%d%%",openWeatherMap.getMain().getHumidity()));
             txtTime.setText(String.format("%s/%s",Common.unixTimeStampToDateTime(openWeatherMap.getSys().getSunrise()),Common.unixTimeStampToDateTime(openWeatherMap.getSys().getSunset())));
-            txtCelsius.setText(String.format("%.2f °C",openWeatherMap.getMain().getTemp()));
-            Picasso.get() //with(MainActivity.this)
-                    .load(Common.getImage(openWeatherMap.getWeather().get(0).getIcon()))
-                    .into(imageView);
+            txtCelsius.setText(String.format("%.0f°C",openWeatherMap.getMain().getTemp()));
+
+
+            //Picasso.get() //with(MainActivity.this)
+            //        .load(Common.getImage(openWeatherMap.getWeather().get(0).getIcon()))
+             //       .into(imageView);
 
         }
 

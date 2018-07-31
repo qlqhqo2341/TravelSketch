@@ -32,7 +32,7 @@ public class Common {
 
     //업데이트 날짜
     public static String getDateNow() {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy 년 M 월 dd 일 HH:mm");
+        DateFormat dateFormat = new SimpleDateFormat("HH:mm");
         Date date = new Date();
         return dateFormat.format(date);
 
