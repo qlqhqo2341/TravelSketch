@@ -29,7 +29,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center"
-        android:layout_marginBottom="58dp" />
+        android:layout_marginBottom="156dp" />
 
     <TextView
         android:id="@+id/txtDescription"
@@ -56,6 +56,7 @@
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/txtTime"
         android:layout_marginEnd="135dp"
+        android:layout_marginTop="-1dp"
         android:gravity="center"
         android:text=""
         android:textColor="#E3F2FD"
@@ -109,5 +110,35 @@
         android:layout_above="@+id/txtLastUpdate"
         android:layout_alignStart="@+id/imageView"
         app:srcCompat="@drawable/humi" />
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="301dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="266dp" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="213dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="132dp"
+        android:text="생성된 일정 없음"
+        android:textSize="30sp" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/floatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="26dp"
+        android:layout_marginEnd="21dp"
+        android:clickable="true"
+        app:srcCompat="@android:drawable/ic_menu_add" />
 
 </RelativeLayout>
