@@ -130,15 +130,36 @@
         android:text="생성된 일정 없음"
         android:textSize="30sp" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/floatingActionButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <com.getbase.floatingactionbutton.FloatingActionsMenu
+        android:layout_width="178dp"
+        android:layout_height="200dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginBottom="26dp"
-        android:layout_marginEnd="21dp"
-        android:clickable="true"
-        app:srcCompat="@android:drawable/ic_menu_add" />
+        app:fab_addButtonColorNormal="#D500F9"
+        app:fab_addButtonColorPressed="#D500F9"
+        app:fab_addButtonPlusIconColor="#ffffff "
+        app:fab_labelStyle="@style/custom_Fab">
+
+        <com.getbase.floatingactionbutton.AddFloatingActionButton
+            android:id="@+id/fab_action1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_colorNormal="#90caf9"
+            app:fab_colorPressed="#ffffff"
+            app:fab_icon="@drawable/ic_add_white"
+            app:fab_size="mini"
+            app:fab_title="일정추가" />
+
+        <com.getbase.floatingactionbutton.AddFloatingActionButton
+            android:id="@+id/fab_action2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_colorNormal="#90caf9"
+            app:fab_colorPressed="#ffffff"
+            app:fab_icon="@drawable/ic_share_white"
+            app:fab_size="mini"
+            app:fab_title="일정공유" />
+
+    </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
 </RelativeLayout>

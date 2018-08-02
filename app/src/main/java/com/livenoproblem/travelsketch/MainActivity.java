@@ -25,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.livenoproblem.travelsketch.Common.Common;
@@ -52,14 +53,27 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        FloatingActionButton button = (FloatingActionButton) findViewById(R.id.floatingActionButton);
-        button.setOnClickListener(new View.OnClickListener(){
+
+
+
+        com.getbase.floatingactionbutton.FloatingActionButton fab1 = (com.getbase.floatingactionbutton.FloatingActionButton) findViewById(R.id.fab_action1);
+        fab1.setOnClickListener(new View.OnClickListener(){
 
             public void onClick(View v){
                 Intent intent = new Intent(getApplicationContext(), manageTravel.class);
                 startActivity(intent);
+                showToast("일정추가");
             }
         });
+        com.getbase.floatingactionbutton.FloatingActionButton fab2 = (com.getbase.floatingactionbutton.FloatingActionButton) findViewById(R.id.fab_action2);
+        fab2.setOnClickListener(new View.OnClickListener(){
+
+            public void onClick(View v){
+
+                showToast("일정공유");
+            }
+        });
+
 
         //Control
         txtCity = (TextView) findViewById(R.id.txtCity);
@@ -99,6 +113,14 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     }
 
     }
+
+    //토스트메시지
+
+    public void showToast(String message)
+    {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
 
     @Override
     protected void onPause() {
