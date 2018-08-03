@@ -51,7 +51,7 @@
     <TextView
 
         android:id="@+id/txtHumidity"
-        android:layout_width="93dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/txtTime"
@@ -108,7 +108,7 @@
         android:layout_width="38dp"
         android:layout_height="38dp"
         android:layout_above="@+id/txtLastUpdate"
-        android:layout_alignStart="@+id/imageView"
+       android:layout_toLeftOf="@id/txtHumidity"
         app:srcCompat="@drawable/humi" />
 
     <View
@@ -130,15 +130,20 @@
         android:text="생성된 일정 없음"
         android:textSize="30sp" />
 
+
+    //플로팅 액션 버튼 부분
+
     <com.getbase.floatingactionbutton.FloatingActionsMenu
-        android:layout_width="178dp"
-        android:layout_height="200dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        app:fab_addButtonColorNormal="#D500F9"
-        app:fab_addButtonColorPressed="#D500F9"
+        app:fab_addButtonColorNormal="#3f51b5"
+        app:fab_addButtonColorPressed="#BBDEFB"
         app:fab_addButtonPlusIconColor="#ffffff "
         app:fab_labelStyle="@style/custom_Fab">
+
+        //버튼 1 일정추가 버튼
 
         <com.getbase.floatingactionbutton.AddFloatingActionButton
             android:id="@+id/fab_action1"
@@ -149,6 +154,8 @@
             app:fab_icon="@drawable/ic_add_white"
             app:fab_size="mini"
             app:fab_title="일정추가" />
+
+        //버튼 2 일정공유 버튼
 
         <com.getbase.floatingactionbutton.AddFloatingActionButton
             android:id="@+id/fab_action2"

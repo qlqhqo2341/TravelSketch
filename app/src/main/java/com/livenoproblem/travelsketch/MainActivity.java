@@ -9,6 +9,7 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.location.LocationProvider;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -53,9 +55,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-
-
         com.getbase.floatingactionbutton.FloatingActionButton fab1 = (com.getbase.floatingactionbutton.FloatingActionButton) findViewById(R.id.fab_action1);
         fab1.setOnClickListener(new View.OnClickListener(){
 
@@ -69,6 +68,13 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         fab2.setOnClickListener(new View.OnClickListener(){
 
             public void onClick(View v){
+                Intent myIntent = new Intent(Intent.ACTION_SEND);
+                myIntent.setType("text/plain");
+                String shareBody = "공유 테스트";
+                String ShareSub = "공유 테스트 2";
+                myIntent.putExtra(Intent.EXTRA_SUBJECT, shareBody);
+                myIntent.putExtra(Intent.EXTRA_TEXT,shareBody);
+                startActivity(Intent.createChooser(myIntent, "일정공유"));
 
                 showToast("일정공유");
             }
@@ -87,7 +93,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
         //Get Coordinates
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        provider = locationManager.getBestProvider(new Criteria(), false);
+        //provider = locationManager.getBestProvider(new Criteria(), false);
+        provider = LocationManager.NETWORK_PROVIDER;    //네트워크로 위치정보 받아오기
 
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -110,6 +117,11 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         Location location = locationManager.getLastKnownLocation(provider);
         if (location == null)
             Log.e("TAG", "No Location");
+            if (locationManager.isProviderEnabled(locationManager.NETWORK_PROVIDER) == true) {
+                provider = LocationManager.NETWORK_PROVIDER;
+            } else
+                provider = LocationManager.GPS_PROVIDER;
+
     }
 
     }
@@ -164,7 +176,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 }, MY_PERMISSION);
 
             }
-            locationManager.requestLocationUpdates(provider, 400, 1, this);
+            locationManager.requestLocationUpdates(provider, 1000, 1, this);
 
     }
 
