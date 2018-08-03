@@ -3,71 +3,51 @@ package com.livenoproblem.travelsketch;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
-import android.text.Layout;
-import android.view.MotionEvent;
-import android.view.View;
-import android.widget.CompoundButton;
-import android.widget.GridView;
 import android.widget.LinearLayout;
-import android.widget.Switch;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.livenoproblem.travelsketch.Struct.Event;
+import com.livenoproblem.travelsketch.Struct.Travel;
 
 public class manageTravel extends Activity {
-    private boolean scrollMode;
+    float dpFactor;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_travel);
-        initGrid();
-        Switch sw = (Switch)findViewById(R.id.scrollSwitch);
-        scrollMode = sw.isChecked();
-        sw.setOnCheckedChangeListener(new Switch.OnCheckedChangeListener(){
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                scrollMode=b;
-                //TODO Change Scollview settings
-            }
-        });
+//        dpFactor = getResources().getDisplayMetrics().densityDpi; TODO error getResource() NULL pointer
+        dpFactor=1.0f;
+
+        Travel trav = new Travel();
+        trav.addEvent(new Event());
+        initGrid(trav);
     }
 
-    @SuppressLint("ClickableViewAccessibility")
-    private void initGrid(){
-        LinearLayout lines[] = new  LinearLayout[]{(LinearLayout)findViewById(R.id.timeLine),
-            (LinearLayout)findViewById(R.id.spaceLine),
-            (LinearLayout)findViewById(R.id.actLine)};
+    private void initGrid(Travel trav){
+        LinearLayout eventList = (LinearLayout)findViewById(R.id.eventList);
+        Event[] events = trav.getEvents();
+        for(Event e : events){
+            LinearLayout eventLayout = new LinearLayout(getApplicationContext());
+            eventLayout.setOrientation(LinearLayout.HORIZONTAL);
 
-        for(LinearLayout l : lines){
-            for(int i=0;i<24;i++){
-                TextView next = new TextView(getApplicationContext());
-                next.setText(String.format("%02d:%02d",i,0));
-                next.setOnTouchListener(new View.OnTouchListener(){
-                    @Override
-                    public boolean onTouch(View view, MotionEvent motionEvent) {
-                        if(scrollMode==true)
-                            return true;
-                        TextView tv = (TextView)view;
-                        if(motionEvent.getAction()==MotionEvent.ACTION_DOWN)
-                            tv.setText(tv.getText()+"D");
-                        else if(motionEvent.getAction()==motionEvent.ACTION_UP)
-                            tv.setText(tv.getText()+"U");
-                        else if(motionEvent.getAction()==motionEvent.ACTION_MOVE)
-                            tv.setText(tv.getText()+"M");
-                        return true;
-                    }
-                });
-                l.addView(next);
-            }
+            LayoutParams textp = new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT);
+//            textp.weight=1.0f; // check equal all TODO
+            TextView timeText,spaceText,actText;
+            timeText = new TextView(getApplicationContext());
+            spaceText = new TextView(getApplicationContext());
+            actText = new TextView(getApplicationContext());
+            eventLayout.addView(timeText,textp);
+            eventLayout.addView(spaceText,textp);
+            eventLayout.addView(actText,textp);
 
-//            l.setOnClickListener(new View.OnClickListener(){
-//                @Override
-//                public void onClick(View view) {
-//                    Toast.makeText(manageTravel.this, String.format("%s",view.getClass().toString()), Toast.LENGTH_SHORT).show();
-//                }
-//            });
+            // convert 5dp to px
+            int margin=(int)(5*dpFactor);
 
+            LayoutParams p = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+            p.setMargins(margin,margin,margin,margin);
+            eventList.addView(eventLayout,p);
         }
     }
-
 
 }
