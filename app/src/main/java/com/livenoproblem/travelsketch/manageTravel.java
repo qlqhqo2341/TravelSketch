@@ -3,6 +3,8 @@ package com.livenoproblem.travelsketch;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
@@ -10,16 +12,23 @@ import android.widget.TextView;
 import com.livenoproblem.travelsketch.Struct.Event;
 import com.livenoproblem.travelsketch.Struct.Travel;
 
+import java.util.Calendar;
+
 public class manageTravel extends Activity {
     float dpFactor;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_travel);
-//        dpFactor = getResources().getDisplayMetrics().densityDpi; TODO error getResource() NULL pointer
-        dpFactor=1.0f;
+
+        //get dpFactor
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        dpFactor=displayMetrics.density;
+        Log.i("TEST","dpFactor : " + dpFactor);
 
         Travel trav = new Travel();
+        trav.addEvent(new Event());
         trav.addEvent(new Event());
         initGrid(trav);
     }
@@ -32,11 +41,14 @@ public class manageTravel extends Activity {
             eventLayout.setOrientation(LinearLayout.HORIZONTAL);
 
             LayoutParams textp = new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT);
-//            textp.weight=1.0f; // check equal all TODO
+            textp.weight=1.0f; // check equal all TODO
             TextView timeText,spaceText,actText;
             timeText = new TextView(getApplicationContext());
+            timeText.setText(e.getStartTimeString() + " ~ " + e.getEndTimeString());
             spaceText = new TextView(getApplicationContext());
+            spaceText.setText(e.getSpace().toString());
             actText = new TextView(getApplicationContext());
+            actText.setText(e.getAction());
             eventLayout.addView(timeText,textp);
             eventLayout.addView(spaceText,textp);
             eventLayout.addView(actText,textp);
