@@ -22,15 +22,6 @@
         android:textSize="18sp"
         android:textStyle="bold" />
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center"
-        android:layout_marginBottom="156dp" />
-
     <TextView
         android:id="@+id/txtDescription"
 
@@ -111,25 +102,22 @@
        android:layout_toLeftOf="@id/txtHumidity"
         app:srcCompat="@drawable/humi" />
 
-    <View
-        android:id="@+id/view"
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="301dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="266dp" />
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="213dp"
-        android:layout_height="wrap_content"
+        android:layout_height="272dp"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="132dp"
-        android:text="생성된 일정 없음"
-        android:textSize="30sp" />
+        android:layout_alignParentStart="true"
+        android:background="#C5CAE9">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+
+
+
+    </ScrollView>
 
     //플로팅 액션 버튼 부분
 
@@ -168,5 +156,33 @@
             app:fab_title="일정공유" />
 
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
+
+    <TextView
+        android:id="@+id/textTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="198dp"
+        android:layout_marginStart="20dp"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/textSpace"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/textTime"
+        android:layout_marginStart="128dp"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/textAct"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/imageView2"
+        android:layout_alignTop="@+id/textTime"
+        android:text="TextView" />
+
 
 </RelativeLayout>

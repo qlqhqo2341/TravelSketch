@@ -55,6 +55,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+
         com.getbase.floatingactionbutton.FloatingActionButton fab1 = (com.getbase.floatingactionbutton.FloatingActionButton) findViewById(R.id.fab_action1);
         fab1.setOnClickListener(new View.OnClickListener(){
 
@@ -81,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         });
 
 
+
         //Control
         txtCity = (TextView) findViewById(R.id.txtCity);
         txtLastUpdate = (TextView) findViewById(R.id.txtLastUpdate);
@@ -88,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         txtHumidity = (TextView) findViewById(R.id.txtHumidity);
         txtTime = (TextView) findViewById(R.id.txtTime);
         txtCelsius = (TextView) findViewById(R.id.txtCelsius);
-        imageView = (ImageView) findViewById(R.id.imageView);
+       // imageView = (ImageView) findViewById(R.id.imageView);
 
 
         //Get Coordinates
