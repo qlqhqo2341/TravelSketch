@@ -155,6 +155,18 @@
             app:fab_size="mini"
             app:fab_title="일정공유" />
 
+        //버튼 3 목적지찾기 버튼
+
+        <com.getbase.floatingactionbutton.AddFloatingActionButton
+            android:id="@+id/fab_action3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_colorNormal="#90caf9"
+            app:fab_colorPressed="#ffffff"
+            app:fab_icon="@drawable/ic_location_on"
+            app:fab_size="mini"
+            app:fab_title="목적지찾기" />
+
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
     <TextView

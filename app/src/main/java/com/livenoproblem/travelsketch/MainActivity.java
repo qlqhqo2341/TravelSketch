@@ -81,7 +81,15 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 showToast("일정공유");
             }
         });
+        com.getbase.floatingactionbutton.FloatingActionButton fab3 = (com.getbase.floatingactionbutton.FloatingActionButton) findViewById(R.id.fab_action3);
+        fab3.setOnClickListener(new View.OnClickListener(){
 
+            public void onClick(View v){
+                Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+                startActivity(intent);
+                showToast("목적지찾기");
+            }
+        });
 
 
         //Control
