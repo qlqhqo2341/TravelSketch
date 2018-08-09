@@ -13,6 +13,7 @@ import com.livenoproblem.travelsketch.Struct.Event;
 import com.livenoproblem.travelsketch.Struct.Travel;
 
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 public class manageTravel extends Activity {
     float dpFactor;
@@ -29,19 +30,18 @@ public class manageTravel extends Activity {
 
         Travel trav = new Travel();
         trav.addEvent(new Event());
-        trav.addEvent(new Event());
         initGrid(trav);
     }
 
     private void initGrid(Travel trav){
-        LinearLayout eventList = (LinearLayout)findViewById(R.id.eventList);
+        LinearLayout eventList = findViewById(R.id.eventList);
         Event[] events = trav.getEvents();
         for(Event e : events){
             LinearLayout eventLayout = new LinearLayout(getApplicationContext());
             eventLayout.setOrientation(LinearLayout.HORIZONTAL);
 
             LayoutParams textp = new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT);
-            textp.weight=1.0f; // check equal all TODO
+            textp.weight=1.0f;
             TextView timeText,spaceText,actText;
             timeText = new TextView(getApplicationContext());
             timeText.setText(e.getStartTimeString() + " ~ " + e.getEndTimeString());
