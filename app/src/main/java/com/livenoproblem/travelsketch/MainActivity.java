@@ -15,7 +15,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -27,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -41,7 +41,7 @@ import java.lang.reflect.Type;
 public class MainActivity extends AppCompatActivity implements LocationListener {
 
     TextView txtCity, txtLastUpdate, txtDescription, txtHumidity, txtTime, txtCelsius;
-    ImageView imageView;
+
 
     LocationManager locationManager;
     String provider;
@@ -56,8 +56,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         setContentView(R.layout.activity_main);
 
 
-
-        com.getbase.floatingactionbutton.FloatingActionButton fab1 = (com.getbase.floatingactionbutton.FloatingActionButton) findViewById(R.id.fab_action1);
+        FloatingActionButton fab1 = findViewById(R.id.fab_action1);
         fab1.setOnClickListener(new View.OnClickListener(){
 
             public void onClick(View v){
@@ -66,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 showToast("일정추가");
             }
         });
-        com.getbase.floatingactionbutton.FloatingActionButton fab2 = (com.getbase.floatingactionbutton.FloatingActionButton) findViewById(R.id.fab_action2);
+        FloatingActionButton fab2 = findViewById(R.id.fab_action2);
         fab2.setOnClickListener(new View.OnClickListener(){
 
             public void onClick(View v){
@@ -81,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 showToast("일정공유");
             }
         });
-        com.getbase.floatingactionbutton.FloatingActionButton fab3 = (com.getbase.floatingactionbutton.FloatingActionButton) findViewById(R.id.fab_action3);
+        FloatingActionButton fab3 = findViewById(R.id.fab_action3);
         fab3.setOnClickListener(new View.OnClickListener(){
 
             public void onClick(View v){
@@ -99,10 +98,10 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         txtHumidity = (TextView) findViewById(R.id.txtHumidity);
         txtTime = (TextView) findViewById(R.id.txtTime);
         txtCelsius = (TextView) findViewById(R.id.txtCelsius);
-       // imageView = (ImageView) findViewById(R.id.imageView);
 
 
-        //Get Coordinates
+
+
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         //provider = locationManager.getBestProvider(new Criteria(), false);
         provider = LocationManager.NETWORK_PROVIDER;    //네트워크로 위치정보 받아오기
