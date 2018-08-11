@@ -17,41 +17,30 @@ public class Travel {
         Event prev = null;
 
         final String overlapTag = "dataError",overlapStr = "There is overlap event. reject";
-        for(int i=0;i<events.size();i++){
-            Event obj = events.get(i);
-            //Find first bigger node at list..
-            if(newbieStarttime.compareTo(obj.getStartTime())>0){
-                //Check overlap if prev is null
-                if(prev==null){
-                    if(obj.getStartTime().compareTo(newbieEndtime)>0){
-                        events.add(0,e);
-                        return true;
-                    }else{
-                        Log.e(overlapTag,overlapStr);
-                        return false;
-                    }
-                }
-                //Check overlap
-                if(prev.getEndTime().compareTo(newbieStarttime)<0 &&
-                        obj.getStartTime().compareTo(newbieEndtime)>0){
-                    events.add(i,e);
-                    break;
-                }else{
-                    Log.e(overlapTag,overlapStr);
-                    return false;
-                }
-            }else{
-                prev=obj;
+        int i;
+        for(i=0;i<=events.size();i++){
+            boolean prevCond,nextCond;
+            prevCond = i==0 || events.get(i-1).getEndTime().compareTo(newbieStarttime) < 0;
+            nextCond = i==events.size() || events.get(i).getStartTime().compareTo(newbieEndtime)>0;
+
+            if(prevCond && nextCond){
+                events.add(i,e);
+                break;
             }
         }
-        events.add(e);
-        return true;
+
+        if(i==events.size()+1){
+            Log.e(overlapTag,overlapStr);
+            return false;
+        }
+        else
+            return true;
     }
     public boolean removeEvent(Event e){
         events.remove(e);
         return false;
     }
     public Event[] getEvents(){
-        return events.toArray(new Event[events.size()]); // TODO need to be check correct works.
+        return events.toArray(new Event[events.size()]);
     }
 }

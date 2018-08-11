@@ -18,7 +18,13 @@ public class Event implements Comparable<Event>{
         this.action = action;
         timeCheck();
     }
-
+    public Event(){
+        startTime = Calendar.getInstance();
+        endTime = Calendar.getInstance();
+        endTime.add(Calendar.SECOND,3);
+        space = new Location("gps");
+        action = "default";
+    }
     private void timeCheck(){
         if (endTime.compareTo(startTime) < 0) {
             String tag = "EventModifier";
@@ -29,36 +35,17 @@ public class Event implements Comparable<Event>{
             endTime.add(Calendar.DAY_OF_MONTH, 1);
         }
     }
-
-    public Event(){
-        startTime = Calendar.getInstance();
-        endTime = Calendar.getInstance();
-        endTime.add(Calendar.SECOND,3);
-        space = new Location("gps");
-        action = "default";
+    private String getTimeString(Calendar time){
+        return String.valueOf(time.get(Calendar.HOUR)) + ':' +
+                String.valueOf(time.get(Calendar.MINUTE)) + ':' +
+                String.valueOf(time.get(Calendar.SECOND));
     }
-
     public Calendar getStartTime(){
         return startTime;
     }
 
     public String getStartTimeString(){
-        StringBuilder sb = new StringBuilder();
-        sb.append(startTime.get(Calendar.HOUR));
-        sb.append(':');
-        sb.append(startTime.get(Calendar.MINUTE));
-        sb.append(':');
-        sb.append(startTime.get(Calendar.SECOND));
-        return sb.toString();
-    }
-    public String getEndTimeString(){
-        StringBuilder sb = new StringBuilder();
-        sb.append(endTime.get(Calendar.HOUR));
-        sb.append(':');
-        sb.append(endTime.get(Calendar.MINUTE));
-        sb.append(':');
-        sb.append(endTime.get(Calendar.SECOND));
-        return sb.toString();
+        return getTimeString(startTime);
     }
 
     public void setStartTime(Calendar startTime) {
@@ -66,9 +53,12 @@ public class Event implements Comparable<Event>{
         timeCheck();
     }
 
-
     public Calendar getEndTime() {
         return endTime;
+    }
+
+    public String getEndTimeString(){
+        return getTimeString(endTime);
     }
 
     public void setEndTime(Calendar endTime) {
