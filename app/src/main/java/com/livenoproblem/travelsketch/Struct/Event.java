@@ -4,9 +4,10 @@ import android.location.Location;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import java.io.Serializable;
 import java.util.Calendar;
 
-public class Event implements Comparable<Event>{
+public class Event implements Serializable, Comparable<Event>{
     private Calendar startTime,endTime;
     private Location space;
     private String action;
@@ -37,9 +38,9 @@ public class Event implements Comparable<Event>{
     }
     private String getTimeString(Calendar time){
         return String.valueOf(time.get(Calendar.HOUR)) + ':' +
-                String.valueOf(time.get(Calendar.MINUTE)) + ':' +
-                String.valueOf(time.get(Calendar.SECOND));
-    }
+            String.valueOf(time.get(Calendar.MINUTE)) + ':' +
+            String.valueOf(time.get(Calendar.SECOND));
+}
     public Calendar getStartTime(){
         return startTime;
     }
@@ -82,5 +83,4 @@ public class Event implements Comparable<Event>{
     public int compareTo(@NonNull Event event) {
         return startTime.compareTo(event.getStartTime());
     }
-
 }

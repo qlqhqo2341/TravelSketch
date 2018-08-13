@@ -16,6 +16,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -35,8 +36,10 @@ import com.google.gson.reflect.TypeToken;
 import com.livenoproblem.travelsketch.Common.Common;
 import com.livenoproblem.travelsketch.Helper.Helper;
 import com.livenoproblem.travelsketch.Model.OpenWeatherMap;
+import com.livenoproblem.travelsketch.Struct.Travel;
 import com.squareup.picasso.Picasso;
 
+import java.io.*;
 import java.lang.reflect.Type;
 
 
@@ -52,15 +55,27 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     private String mNum;
     int MY_PERMISSION = 0;
 
+    File travFile;
+    Travel trav;
+
+    static final int MANAGE_TRAVEL=1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-        //activity_manage_travel 에서 일정 가저오기
-
-
+        //activity_manage_travel 에서 일정 가져오기
+        travFile = new File(getApplicationContext().getFilesDir(),"trav.ser");
+        try{
+            ObjectInputStream input = new ObjectInputStream(new BufferedInputStream(new FileInputStream(travFile)));
+            trav = (Travel)input.readObject();
+            input.close();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+            trav = new Travel();
+        }
 
         // 플로팅 액션 버튼
         FloatingActionButton fab1 = findViewById(R.id.fab_action1);
@@ -68,7 +83,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
             public void onClick(View v){
                 Intent intent = new Intent(getApplicationContext(), manageTravel.class);
-                startActivity(intent);
+                intent.putExtra("travel",trav);
+                startActivityForResult(intent,MANAGE_TRAVEL);
                 showToast("일정추가");
             }
         });
@@ -96,7 +112,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 showToast("목적지찾기");
             }
         });
-
 
         //Control
         txtCity = (TextView) findViewById(R.id.txtCity);
@@ -195,6 +210,16 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             }
             locationManager.requestLocationUpdates(provider, 1000, 1, this);
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==MANAGE_TRAVEL && requestCode==RESULT_OK){
+            this.trav = (Travel)data.getSerializableExtra("travel");
+            travelSave();
+            //TODO 수정된 Travel이 화면에 적용 시켜야함.
+        }
     }
 
     @Override
@@ -406,5 +431,19 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
         }
 
+    }
+
+    private boolean travelSave(){
+        try{
+            ObjectOutputStream output = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(travFile)));
+            output.writeObject(trav);
+            output.close();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            showToast("파일 저장 실패");
+            return false;
+        }
+        return true;
     }
 }
