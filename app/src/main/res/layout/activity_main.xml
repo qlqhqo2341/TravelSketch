@@ -23,6 +23,34 @@
         android:textStyle="bold" />
 
     <TextView
+        android:id="@+id/txtDesa"
+        android:layout_width="84dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="12dp"
+        android:gravity="start"
+        android:text=""
+        android:textColor="#E3F2FD"
+        android:textSize="12sp"
+        android:textStyle="bold" />
+
+
+    <TextView
+        android:id="@+id/txtEmergencyCall"
+        android:layout_width="285dp"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="3dp"
+        android:layout_toEndOf="@+id/txtDesa"
+        android:gravity="start"
+        android:text=""
+        android:textColor="#E3F2FD"
+        android:textSize="12sp"
+        android:textStyle="bold" />
+
+    <TextView
         android:id="@+id/txtDescription"
 
         android:layout_width="match_parent"
@@ -115,33 +143,6 @@
     </ScrollView>
 
     //플로팅 액션 버튼 부분
-
-    <TextView
-        android:id="@+id/textTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="198dp"
-        android:layout_marginStart="20dp"
-        android:text="TextView" />
-
-    <TextView
-        android:id="@+id/textSpace"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignTop="@+id/textTime"
-        android:layout_marginStart="128dp"
-        android:text="TextView" />
-
-    <TextView
-        android:id="@+id/textAct"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/imageView2"
-        android:layout_alignTop="@+id/textTime"
-        android:text="TextView" />
 
     <com.getbase.floatingactionbutton.FloatingActionsMenu
         android:id="@+id/fab_Menu"

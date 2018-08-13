@@ -10,6 +10,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -40,14 +42,14 @@ import java.lang.reflect.Type;
 
 public class MainActivity extends AppCompatActivity implements LocationListener {
 
-    TextView txtCity, txtLastUpdate, txtDescription, txtHumidity, txtTime, txtCelsius;
+    TextView txtCity, txtLastUpdate, txtDescription, txtHumidity, txtTime, txtCelsius, txtDesa, txtEmergencyCall;
 
 
     LocationManager locationManager;
     String provider;
     static double lat, lng;
     OpenWeatherMap openWeatherMap = new OpenWeatherMap();
-
+    private String mNum;
     int MY_PERMISSION = 0;
 
     @Override
@@ -56,6 +58,11 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         setContentView(R.layout.activity_main);
 
 
+        //activity_manage_travel 에서 일정 가저오기
+
+
+
+        // 플로팅 액션 버튼
         FloatingActionButton fab1 = findViewById(R.id.fab_action1);
         fab1.setOnClickListener(new View.OnClickListener(){
 
@@ -98,8 +105,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         txtHumidity = (TextView) findViewById(R.id.txtHumidity);
         txtTime = (TextView) findViewById(R.id.txtTime);
         txtCelsius = (TextView) findViewById(R.id.txtCelsius);
-
-
+        txtEmergencyCall = (TextView) findViewById(R.id.txtEmergencyCall);
+        txtDesa = (TextView) findViewById(R.id.txtDesa);
 
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -254,11 +261,148 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             txtHumidity.setText(String.format("%d%%",openWeatherMap.getMain().getHumidity()));
             txtTime.setText(String.format("%s/%s",Common.unixTimeStampToDateTime(openWeatherMap.getSys().getSunrise()),Common.unixTimeStampToDateTime(openWeatherMap.getSys().getSunset())));
             txtCelsius.setText(String.format("%.0f°C",openWeatherMap.getMain().getTemp()));
+            txtDesa.setText("※"+String.format("%s",openWeatherMap.getSys().getCountry())+"대사관번호");
+            if(openWeatherMap.getSys().getCountry().equals("KR"))
+            {
+                txtEmergencyCall.setText("+82-2-3210-0404");
+            }
+            else if(openWeatherMap.getSys().getCountry().equals("GR")) //그리스
+            {
+                txtEmergencyCall.setText("00800-82-12-17264");
+            }
+            else if(openWeatherMap.getSys().getCountry().equals("ZA")) //남아공
+            {
+                txtEmergencyCall.setText("0800-99-4724");
+            }
+            else if(openWeatherMap.getSys().getCountry().equals("NL")) //네덜란드
+            {
+                txtEmergencyCall.setText("0800-022-9657");
+            }
+            else if(openWeatherMap.getSys().getCountry().equals("NO")) //노르웨이
+            {
+                txtEmergencyCall.setText("800-1-8517");
+            }
+            else if(openWeatherMap.getSys().getCountry().equals("NZ"))  //뉴질랜드
+            {
+                txtEmergencyCall.setText("0800-449522");
+            }
+            else if(openWeatherMap.getSys().getCountry().equals("DK"))  //덴마크
+            {
+                txtEmergencyCall.setText("8088-5544");
+            }
+            else if(openWeatherMap.getSys().getCountry().equals("DE")) //독일
+            {
+                txtEmergencyCall.setText("0800-181-6982");
+            }
+            else if(openWeatherMap.getSys().getCountry().equals("RU")) //러시아
+            {
+                txtEmergencyCall.setText("810800-2022-2082");
+            }
+            else if(openWeatherMap.getSys().getCountry().equals("MO")) //마카오
+            {
+                txtEmergencyCall.setText("0800-652");
+            }
+            else if(openWeatherMap.getSys().getCountry().equals("MY")) //말레이시아
+            {
+                txtEmergencyCall.setText("1-800-81-2099");
+            }
+            else if(openWeatherMap.getSys().getCountry().equals("US")) //미국
+            {
+                if(openWeatherMap.getName().equals("Hawaii"))
+                {
+                    txtEmergencyCall.setText("1-800-631-9551");
+                }
+              else
+                {
+                    txtEmergencyCall.setText("1-866-236-5670");
+                }
+            }
+            else if(openWeatherMap.getSys().getCountry().equals("BE")) //벨기에
+            {
+                txtEmergencyCall.setText("0800-7-1233");
+            }
+            else if(openWeatherMap.getSys().getCountry().equals("GR")) //사이프러스
+            {
+                txtEmergencyCall.setText("8009-5685");
+            }
+            else if(openWeatherMap.getSys().getCountry().equals("SE")) //스웨덴
+            {
+                txtEmergencyCall.setText("020-795642");
+            }
+            else if(openWeatherMap.getSys().getCountry().equals("CH")) //스위스
+            {
+                txtEmergencyCall.setText("0800-561-345");
+            }
+            else if(openWeatherMap.getSys().getCountry().equals("SG")) //싱가포르
+            {
+                txtEmergencyCall.setText("800-8211-338");
+            }
+            else if(openWeatherMap.getSys().getCountry().equals("GB")) //영국
+            {
+                txtEmergencyCall.setText("0800-028-8307");
+            }
+            else if(openWeatherMap.getSys().getCountry().equals("IL")) //이스라엘
+            {
+                txtEmergencyCall.setText("180-947-6887");
+            }
+            else if(openWeatherMap.getSys().getCountry().equals("IT")) //이탈리아
+            {
+                txtEmergencyCall.setText("8007-82603");
+            }
+            else if(openWeatherMap.getSys().getCountry().equals("ID")) //인도네시아
+            {
+                txtEmergencyCall.setText("001-803-821-16863");
+            }
+            else if(openWeatherMap.getSys().getCountry().equals("JP")) //일본
+            {
+                txtEmergencyCall.setText("00531-82-0440");
+            }
+            else if(openWeatherMap.getSys().getCountry().equals("CN")) //중국
+            {
+                txtEmergencyCall.setText("10800-282-0001");
+            }
+            else if(openWeatherMap.getSys().getCountry().equals("CA")) //캐나다
+            {
+                txtEmergencyCall.setText("1-866-708-2838");
+            }
+            else if(openWeatherMap.getSys().getCountry().equals("TH")) //타이
+            {
+                txtEmergencyCall.setText("001-800-821-16892");
+            }
+            else if(openWeatherMap.getSys().getCountry().equals("TW")) //타이완
+            {
+                txtEmergencyCall.setText("00801-82-7353");
+            }
+            else if(openWeatherMap.getSys().getCountry().equals("FR")) //프랑스
+            {
+                txtEmergencyCall.setText("0800-90-2590");
+            }
+            else if(openWeatherMap.getSys().getCountry().equals("PH")) //필리핀
+            {
+                txtEmergencyCall.setText("1-800-1-821-0248");
+            }
+            else if(openWeatherMap.getSys().getCountry().equals("AU")) //호주
+            {
+                txtEmergencyCall.setText("1-800-249-224");
+            }
+            else if(openWeatherMap.getSys().getCountry().equals("HK")) //홍콩
+            {
+                txtEmergencyCall.setText("800-90-0524");
+            }
+            else
+            {
+                txtEmergencyCall.setText("+82-2-3210-0404");
+            }
+            //대사관연락
+            mNum = txtEmergencyCall.getText().toString();
+            final String tel ="tel:" + mNum;
+            txtEmergencyCall.setOnClickListener(new View.OnClickListener(){
 
-
-            //Picasso.get() //with(MainActivity.this)
-            //        .load(Common.getImage(openWeatherMap.getWeather().get(0).getIcon()))
-             //       .into(imageView);
+                public void onClick(View v){
+                    startActivity(new Intent("android.intent.action.DIAL", Uri.parse(tel)));
+                    showToast("긴급전화");
+                }
+            });
 
         }
 
