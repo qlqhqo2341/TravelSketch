@@ -78,6 +78,16 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         }
 
         // 플로팅 액션 버튼
+        FloatingActionButton fab0 = findViewById(R.id.fab_action0);
+        fab0.setOnClickListener(new View.OnClickListener(){
+
+            public void onClick(View v){
+                Intent intent = new Intent(getApplicationContext(), ViewListContents.class);
+                startActivity(intent);
+                showToast("여행노트");
+            }
+        });
+
         FloatingActionButton fab1 = findViewById(R.id.fab_action1);
         fab1.setOnClickListener(new View.OnClickListener(){
 
@@ -346,7 +356,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             {
                 txtEmergencyCall.setText("0800-7-1233");
             }
-            else if(openWeatherMap.getSys().getCountry().equals("GR")) //사이프러스
+            else if(openWeatherMap.getSys().getCountry().equals("CY")) //사이프러스
             {
                 txtEmergencyCall.setText("8009-5685");
             }

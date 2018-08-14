@@ -155,6 +155,18 @@
         app:fab_addButtonPlusIconColor="#ffffff "
         app:fab_labelStyle="@style/custom_fab">
 
+        //버튼 0 여행노트
+
+        <com.getbase.floatingactionbutton.AddFloatingActionButton
+            android:id="@+id/fab_action0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_event_note"
+            app:fab_colorNormal="#ffffff"
+            app:fab_colorPressed="#ffffff"
+            app:fab_size="mini"
+            app:fab_title="여행노트" />
+
         //버튼 1 일정추가 버튼
 
         <com.getbase.floatingactionbutton.AddFloatingActionButton
