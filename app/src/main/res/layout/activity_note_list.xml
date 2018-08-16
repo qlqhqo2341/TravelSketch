@@ -33,11 +33,11 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/fab_Menu"
         android:layout_alignStart="@+id/fab_Menu"
-        android:src="@drawable/ic_add_white"
+        android:src="@drawable/ic_home_black_24dp"
         app:fab_colorNormal="#ffffff"
         app:fab_colorPressed="#ffffff"
         app:fab_size="mini"
-        app:fab_title="리스트추가" />
+        app:fab_title="메인으로" />
 
         <com.getbase.floatingactionbutton.AddFloatingActionButton
             android:id="@+id/fab_action1"
@@ -45,11 +45,12 @@
             android:layout_height="wrap_content"
             android:layout_above="@+id/fab_Menu"
             android:layout_alignStart="@+id/fab_Menu"
-            android:src="@drawable/ic_home_black_24dp"
+            android:src="@drawable/ic_add_white"
             app:fab_colorNormal="#ffffff"
             app:fab_colorPressed="#ffffff"
             app:fab_size="mini"
-            app:fab_title="메인으로" />
+            app:fab_title="리스트추가" />
+
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
 

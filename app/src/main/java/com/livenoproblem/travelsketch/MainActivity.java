@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         fab0.setOnClickListener(new View.OnClickListener(){
 
             public void onClick(View v){
-                Intent intent = new Intent(getApplicationContext(), ViewListContents.class);
+                Intent intent = new Intent(getApplicationContext(), ListDataActivity.class);
                 startActivity(intent);
                 showToast("여행노트");
             }

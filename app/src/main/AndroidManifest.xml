@@ -29,8 +29,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".manageTravel" />
-        <activity android:name=".TravelNote" />
-        <activity android:name=".ViewListContents" />
+        <activity android:name=".ListDataActivity" />
+        <activity android:name=".EditDataActivity" />
+        <activity android:name=".MakeDataActivity" />
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAc2D--l83AIlAZJZeUhUyokRNrE142F_M" />
