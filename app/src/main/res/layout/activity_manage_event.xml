@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
+        android:onClick="onClick"
         android:text="시작시간수정"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -22,6 +23,7 @@
         android:layout_height="45dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
+        android:onClick="onClick"
         android:text="종료시간수정"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/startTimeBtn" />
@@ -59,7 +61,7 @@
         app:layout_constraintTop_toBottomOf="@+id/endTimeBtn" />
 
     <EditText
-        android:id="@+id/editText2"
+        android:id="@+id/actText"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="16dp"
@@ -67,21 +69,36 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:ems="10"
+        android:gravity="left"
         android:inputType="textMultiLine"
+        android:singleLine="false"
+        android:text="Text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/actLabel" />
 
     <Button
-        android:id="@+id/button5"
+        android:id="@+id/spaceBtn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
+        android:onClick="onClick"
         android:text="장소 : "
+        app:layout_constraintBottom_toBottomOf="@id/actLabel"
+        app:layout_constraintStart_toEndOf="@+id/actLabel" />
+
+    <Button
+        android:id="@+id/deleteBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:onClick="onClick"
+        android:text="삭제"
+        app:layout_constraintBottom_toBottomOf="@+id/actLabel"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/actLabel"
-        app:layout_constraintBottom_toBottomOf="@id/actLabel" />
+        app:layout_constraintStart_toEndOf="@+id/spaceBtn"
+        app:layout_constraintTop_toTopOf="@+id/spaceBtn" />
 
 </android.support.constraint.ConstraintLayout>

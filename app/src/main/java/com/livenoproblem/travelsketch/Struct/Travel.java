@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.GregorianCalendar;
 
 public class Travel implements Serializable{
     private ArrayList<Event> events;
@@ -23,8 +24,8 @@ public class Travel implements Serializable{
         int i;
         for(i=0;i<=events.size();i++){
             boolean prevCond,nextCond;
-            prevCond = i==0 || events.get(i-1).getEndTime().compareTo(newbieStarttime) < 0;
-            nextCond = i==events.size() || events.get(i).getStartTime().compareTo(newbieEndtime) > 0;
+            prevCond = i==0 || events.get(i-1).getEndTime().compareTo(newbieStarttime) <= 0;
+            nextCond = i==events.size() || events.get(i).getStartTime().compareTo(newbieEndtime) >= 0;
 
             if(prevCond && nextCond){
                 events.add(i,e);
@@ -71,17 +72,19 @@ public class Travel implements Serializable{
         return true;
     }
 
-    public Event continuousLastEvent(){
+    public Calendar getContinuousLastTime(){
         Event prev = null;
+        if(events.size()==0)
+            return new GregorianCalendar();
         for(Event e : events){
             if(prev==null){
                 prev=e;
                 continue;
             }
             if(prev.getEndTime().compareTo(e.getStartTime()) < 0 )
-                return prev;
+                return prev.getEndTime();
             prev=e;
         }
-        return events.get(events.size()-1);
+        return events.get(events.size()-1).getEndTime();
     }
 }

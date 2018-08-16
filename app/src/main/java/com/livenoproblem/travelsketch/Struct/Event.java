@@ -21,7 +21,8 @@ public class Event implements Serializable, Comparable<Event>{
     }
     public Event(){
         startTime = Calendar.getInstance();
-        endTime = Calendar.getInstance();
+        startTime.set(Calendar.SECOND,0);
+        endTime = (Calendar)startTime.clone();
         endTime.add(Calendar.SECOND,3);
         space = new Location("gps");
         action = "default";

@@ -62,7 +62,7 @@ public class manageTravel extends AppCompatActivity implements View.OnClickListe
             timeText = new TextView(getApplicationContext());
             timeText.setText(e.getStartTimeString() + " ~ " + e.getEndTimeString());
             spaceText = new TextView(getApplicationContext());
-            spaceText.setText(e.getSpace().toString());
+            spaceText.setText(e.getSpace()==null ? "미지정" : e.getSpace().toString());
             actText = new TextView(getApplicationContext());
             actText.setText(e.getAction());
             eventLayout.addView(timeText,textp);
@@ -89,7 +89,7 @@ public class manageTravel extends AppCompatActivity implements View.OnClickListe
         }
         if(view.getClass() == LinearLayout.class){
             Intent intent = new Intent(getApplicationContext(), manageEvent.class);
-            intent.putExtra("command",manageEvent.ADD_EVENT);
+            intent.putExtra("command",manageEvent.MANAGE_EVENT);
             intent.putExtra("travel",trav);
 
             Event e = LayoutToEvent.get(view);
@@ -102,7 +102,7 @@ public class manageTravel extends AppCompatActivity implements View.OnClickListe
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode==RESULT_OK){
-            Travel trav = (Travel)data.getSerializableExtra("trav");
+            Travel trav = (Travel)data.getSerializableExtra("travel");
             this.trav = trav;
             initGrid();
         }
