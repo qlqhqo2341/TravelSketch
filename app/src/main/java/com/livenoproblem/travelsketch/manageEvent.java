@@ -1,13 +1,18 @@
 package com.livenoproblem.travelsketch;
 
-import android.app.ActionBar;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.drm.DrmStore;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -18,8 +23,8 @@ import android.widget.Toast;
 import com.livenoproblem.travelsketch.Struct.Event;
 import com.livenoproblem.travelsketch.Struct.Travel;
 
+
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 public class manageEvent extends AppCompatActivity implements View.OnClickListener, TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener{
     static final int ADD_EVENT=1,MANAGE_EVENT=2;
@@ -30,63 +35,59 @@ public class manageEvent extends AppCompatActivity implements View.OnClickListen
 
     Calendar startTime,endTime;
     Location space;
-    String act;
+    TextView actText;
 
-    Button startTimeBtn,endTimeBtn,spaceBtn,deleteBtn;
+    Button startTimeBtn,endTimeBtn,spaceBtn;
+    MenuItem revertItem;
 
+    static Location lastLocation = null;
+    static String lastAct="자가용 이동 | 렌트카 이동 | 저녁식사 | 장보기";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_event);
 
-        ActionBar actionBar = getActionBar();
+        ActionBar actionBar = getSupportActionBar();
 
         Intent receiveIntent = getIntent();
         commandCode=receiveIntent.getIntExtra("command",-1);
         if(commandCode==-1){ Log.e("manageEvent","get wrong commandCode"); commandCode=ADD_EVENT;}
-        trav = (Travel)receiveIntent.getSerializableExtra("travel");
+        trav = (commandCode==ADD_EVENT) ? (Travel)receiveIntent.getSerializableExtra("travel") : null;
         event = (commandCode==MANAGE_EVENT) ? (Event)receiveIntent.getSerializableExtra("event") : null;
+        actionBar.setTitle((commandCode==ADD_EVENT) ? "이벤트 추가" : "이벤트 수정");
 
         startTimeBtn = (Button)findViewById(R.id.startTimeBtn);
         endTimeBtn = (Button)findViewById(R.id.endTimeBtn);
         spaceBtn = (Button)findViewById(R.id.spaceBtn);
-        deleteBtn = (Button)findViewById(R.id.deleteBtn);
-        deleteBtn.setVisibility((commandCode==ADD_EVENT) ? View.VISIBLE : View.INVISIBLE);
+        actText = (TextView)findViewById(R.id.actText);
 
         initData();
         displayData();
-
-        Toast.makeText(getApplicationContext(),"작성이 완료되면 뒤로가기를 눌러주세요.",Toast.LENGTH_SHORT).show();
     }
 
     private void initData(){
         switch (commandCode){
             case ADD_EVENT:
-                startTime = trav.getContinuousLastTime();
-                endTime = new GregorianCalendar(startTime.get(Calendar.YEAR),
-                        startTime.get(Calendar.MONTH),
-                        startTime.get(Calendar.DAY_OF_MONTH),
-                        startTime.get(Calendar.HOUR_OF_DAY)+1,
-                        startTime.get(Calendar.MINUTE),
-                        startTime.get(Calendar.SECOND));
+                startTime = trav.getLastTime();
+                endTime = (Calendar)startTime.clone();
+                endTime.add(Calendar.HOUR_OF_DAY,1);
                 space = null;
-                act="자가용 이동 | 렌트카 이동 | 저녁식사 | 장보기";
+                actText.setText(lastAct);
                 break;
             case MANAGE_EVENT:
                 startTime = event.getStartTime();
                 endTime = event.getEndTime();
                 space = event.getSpace();
-                act = event.getAction();
+                actText.setText(event.getAction());
                 break;
         }
     }
 
-    private String convertTimeToString(Calendar c){
+    private static String convertTimeToString(Calendar c){
         return c.get(Calendar.YEAR) + "/" +
-                c.get(Calendar.MONTH) + "/" +
+                (c.get(Calendar.MONTH)+1) + "/" +
                 c.get(Calendar.DAY_OF_MONTH) + " " +
-                c.get(Calendar.HOUR) + ":"+
-                c.get(Calendar.MINUTE);
+                Event.getTimeString(c);
     }
 
     private void displayData(){
@@ -97,29 +98,61 @@ public class manageEvent extends AppCompatActivity implements View.OnClickListen
 
         start.setText(convertTimeToString(startTime));
         end.setText(convertTimeToString(endTime));
-        act.setText(this.act);
         spaceBtn.setText("장소 : " + ((space!=null) ? "지정" : "미지정"));
     }
 
-    private Travel getResult(){
-        Event newbie = new Event(startTime,endTime,space,act);
-
-        if(commandCode==MANAGE_EVENT) trav.removeEvent(event);
+    private Travel getAddResult(){
+        Event newbie = makeEvent();
         boolean result = trav.addEvent(newbie);
         if(result==false){
-            if(commandCode==MANAGE_EVENT) trav.addEvent(event);
-            return trav; //TODO 에러표시
+            return null;
         }
         return trav;
     }
 
+    private Event makeEvent(){
+        return new Event(startTime, endTime,space, actText.getText().toString());
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.manage_menu, menu);
+        if(commandCode==MANAGE_EVENT) {
+            MenuItem removeItem = menu.findItem(R.id.action_remove);
+            removeItem.setVisible(true);
+        }
+        revertItem = menu.findItem(R.id.action_revert);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent = new Intent();
+        switch(item.getItemId()){
+            case R.id.action_finish:
+                lastAct = actText.getText().toString();
+                lastLocation = space;
+                intent.putExtra("event",makeEvent());
+                setResult(RESULT_OK,intent);
+                finish();
+                break;
+            case R.id.action_remove:
+                finish();
+                break;
+            case R.id.action_revert:
+                intent.putExtra("event",event);
+                setResult(RESULT_OK,intent);
+                finish();
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        return true;
+    }
+
     @Override
     public void onBackPressed() {
-        //TODO 데이터 체크후 토스트 띄우고 돌아가자!
-        Intent intent = new Intent();
-        intent.putExtra("travel",getResult());
-        setResult(RESULT_OK,intent);
-        super.onBackPressed();
+        onOptionsItemSelected(revertItem);
     }
 
 
@@ -141,8 +174,10 @@ public class manageEvent extends AppCompatActivity implements View.OnClickListen
     @Override
     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
         control.set(i,i1,i2);
-
         displayData();
+        TimePickerDialog timePickerDialog = new TimePickerDialog(manageEvent.this,
+                this,control.get(Calendar.HOUR_OF_DAY),control.get(Calendar.MINUTE),false);
+        timePickerDialog.show();
     }
 
     @Override
@@ -151,22 +186,11 @@ public class manageEvent extends AppCompatActivity implements View.OnClickListen
             control = (view==startTimeBtn) ? startTime : endTime;
             DatePickerDialog datePickerDialog = new DatePickerDialog(manageEvent.this,
                     this,control.get(Calendar.YEAR),control.get(Calendar.MONTH),control.get(Calendar.DAY_OF_MONTH));
-            TimePickerDialog timePickerDialog = new TimePickerDialog(manageEvent.this,
-                    this,control.get(Calendar.HOUR_OF_DAY),control.get(Calendar.MINUTE),false);
-            timePickerDialog.show();
+
             datePickerDialog.show();
         }
         else if(view==spaceBtn){
-
+            //TODO 지도 연결하기
         }
-        else if(view==deleteBtn){
-
-        }
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-
     }
 }

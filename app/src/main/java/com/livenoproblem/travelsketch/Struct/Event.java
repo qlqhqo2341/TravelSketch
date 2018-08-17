@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.io.Serializable;
+import java.sql.Date;
 import java.util.Calendar;
 
 public class Event implements Serializable, Comparable<Event>{
@@ -37,10 +38,11 @@ public class Event implements Serializable, Comparable<Event>{
             endTime.add(Calendar.DAY_OF_MONTH, 1);
         }
     }
-    private String getTimeString(Calendar time){
-        return String.valueOf(time.get(Calendar.HOUR)) + ':' +
-            String.valueOf(time.get(Calendar.MINUTE)) + ':' +
-            String.valueOf(time.get(Calendar.SECOND));
+    public static String getTimeString(Calendar time){
+        int hour=time.get(Calendar.HOUR);
+        String AMPM = (time.get(Calendar.AM_PM)==Calendar.AM) ? "AM" : "PM";
+        if(hour==0) hour=12;
+        return String.format("%2s %02d:%02d",AMPM,hour,time.get(Calendar.MINUTE));
 }
     public Calendar getStartTime(){
         return startTime;
@@ -83,5 +85,17 @@ public class Event implements Serializable, Comparable<Event>{
     @Override
     public int compareTo(@NonNull Event event) {
         return startTime.compareTo(event.getStartTime());
+    }
+
+    public static int compareDate(Calendar one, Calendar two){
+        Date oned = Date.valueOf(String.format("%04d-%02d-%02d",
+                one.get(Calendar.YEAR),
+                one.get(Calendar.MONTH)+1,
+                one.get(Calendar.DAY_OF_MONTH)));
+        Date twod = Date.valueOf(String.format("%04d-%02d-%02d",
+                two.get(Calendar.YEAR),
+                two.get(Calendar.MONTH)+1,
+                two.get(Calendar.DAY_OF_MONTH)));
+        return oned.compareTo(twod);
     }
 }

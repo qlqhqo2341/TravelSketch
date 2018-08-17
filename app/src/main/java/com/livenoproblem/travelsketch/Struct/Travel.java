@@ -87,4 +87,10 @@ public class Travel implements Serializable{
         }
         return events.get(events.size()-1).getEndTime();
     }
+
+    public Calendar getLastTime(){
+        if(events.isEmpty())
+            return new GregorianCalendar();
+        return events.get(events.size()-1).getEndTime();
+    }
 }

@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             input.close();
         }
         catch(Exception e){
+            Log.i("MainActivity","새로운 trav를 생성합니다.");
             e.printStackTrace();
             trav = new Travel();
         }
@@ -225,7 +226,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode==MANAGE_TRAVEL && requestCode==RESULT_OK){
+        if(requestCode==MANAGE_TRAVEL && resultCode==RESULT_OK){
             this.trav = (Travel)data.getSerializableExtra("travel");
             travelSave();
             //TODO 수정된 Travel이 화면에 적용 시켜야함.
