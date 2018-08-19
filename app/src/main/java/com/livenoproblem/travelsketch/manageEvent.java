@@ -3,7 +3,6 @@ package com.livenoproblem.travelsketch;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
-import android.drm.DrmStore;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -150,11 +149,15 @@ public class manageEvent extends AppCompatActivity implements View.OnClickListen
         return true;
     }
 
+    private long backKeyPressedTime = 0;
     @Override
     public void onBackPressed() {
-        onOptionsItemSelected(revertItem);
+        if(System.currentTimeMillis()>backKeyPressedTime+2000)
+            Toast.makeText(getApplicationContext(),"현재 수정 사항은 없어집니다. 종료하시려면 다시 눌러주세요.",Toast.LENGTH_SHORT).show();
+        else
+            onOptionsItemSelected(revertItem);
+        backKeyPressedTime=System.currentTimeMillis();
     }
-
 
     private Calendar control;
     @Override

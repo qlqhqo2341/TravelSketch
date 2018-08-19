@@ -35,12 +35,12 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAc2D--l83AIlAZJZeUhUyokRNrE142F_M" />
+            android:value="AIzaSyDOGj6hO5kRmm0wzhctiOu5bU1shN9rEtY" />
 
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" />
-        <activity android:name=".manageEvent"></activity>
+        <activity android:name=".manageEvent" />
     </application>
 
 </manifest>
