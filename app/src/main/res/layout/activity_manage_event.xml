@@ -48,6 +48,27 @@
         app:layout_constraintLeft_toRightOf="@id/endTimeBtn"
         app:layout_constraintRight_toRightOf="parent" />
 
+    <AutoCompleteTextView
+        android:id="@+id/spaceText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:hint="주소, 지번을 입력해주세요."
+        android:imeOptions="actionSearch"
+        android:textColor="#000"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toStartOf="@+id/spaceBtn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/endTimeBtn" />
+    <Button
+        android:id="@+id/spaceBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:onClick="onClick"
+        android:text="지도"
+        app:layout_constraintTop_toBottomOf="@id/endTimeBtn"
+        app:layout_constraintRight_toRightOf="parent"/>
     <TextView
         android:id="@+id/actLabel"
         android:layout_width="0dp"
@@ -58,7 +79,7 @@
         android:textAppearance="@android:style/TextAppearance.Material.Large"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="@id/endTimeBtn"
-        app:layout_constraintTop_toBottomOf="@+id/endTimeBtn" />
+        app:layout_constraintTop_toBottomOf="@+id/spaceText" />
 
     <EditText
         android:id="@+id/actText"
@@ -78,16 +99,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/actLabel" />
 
-    <Button
-        android:id="@+id/spaceBtn"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:onClick="onClick"
-        android:text="장소 : "
-        app:layout_constraintBottom_toBottomOf="@id/actLabel"
-        app:layout_constraintStart_toEndOf="@+id/actLabel"
-        app:layout_constraintEnd_toEndOf="parent"/>
+
 
 </android.support.constraint.ConstraintLayout>

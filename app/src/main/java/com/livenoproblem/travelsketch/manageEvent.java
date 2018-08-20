@@ -13,12 +13,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.livenoproblem.travelsketch.Struct.Event;
 import com.livenoproblem.travelsketch.Struct.Travel;
 
@@ -36,6 +38,7 @@ public class manageEvent extends AppCompatActivity implements View.OnClickListen
     Location space;
     TextView actText;
 
+    AutoCompleteTextView spaceText;
     Button startTimeBtn,endTimeBtn,spaceBtn;
     MenuItem revertItem;
 
@@ -59,6 +62,8 @@ public class manageEvent extends AppCompatActivity implements View.OnClickListen
         endTimeBtn = (Button)findViewById(R.id.endTimeBtn);
         spaceBtn = (Button)findViewById(R.id.spaceBtn);
         actText = (TextView)findViewById(R.id.actText);
+        spaceText = (AutoCompleteTextView)findViewById(R.id.spaceText);
+
 
         initData();
         displayData();
@@ -194,6 +199,13 @@ public class manageEvent extends AppCompatActivity implements View.OnClickListen
         }
         else if(view==spaceBtn){
             //TODO 지도 연결하기
+        }
+    }
+
+    private class mapHandler {
+        GoogleApiClient googleApiClient;
+
+        public mapHandler(){
         }
     }
 }

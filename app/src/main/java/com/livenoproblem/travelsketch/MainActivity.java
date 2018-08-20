@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //activity_manage_travel 에서 일정 가져오기
+        //파일에서 일정 로드하기
         travFile = new File(getApplicationContext().getFilesDir(),"trav.ser");
         try{
             ObjectInputStream input = new ObjectInputStream(new BufferedInputStream(new FileInputStream(travFile)));
