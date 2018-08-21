@@ -36,8 +36,10 @@ public class manageEvent extends AppCompatActivity implements View.OnClickListen
     Calendar startTime,endTime;
     Location space;
     TextView actText;
-
-    Button startTimeBtn,endTimeBtn,spaceBtn;
+    Button startTimeBtn;
+    Button endTimeBtn;
+    Button spaceBtn;
+    TextView textView;
     MenuItem revertItem;
 
     static Location lastLocation = null;
@@ -47,9 +49,17 @@ public class manageEvent extends AppCompatActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_event);
 
+
         ActionBar actionBar = getSupportActionBar();
 
         Intent receiveIntent = getIntent();
+        //장소불러오기
+        Intent intent = getIntent();
+        String place = intent.getStringExtra("place");
+        //Maps Activity에서 장소추가를  누르면  place로 장소 불러옴
+
+
+
         commandCode=receiveIntent.getIntExtra("command",-1);
         if(commandCode==-1){ Log.e("manageEvent","get wrong commandCode"); commandCode=ADD_EVENT;}
         trav = (commandCode==ADD_EVENT) ? (Travel)receiveIntent.getSerializableExtra("travel") : null;
@@ -63,6 +73,7 @@ public class manageEvent extends AppCompatActivity implements View.OnClickListen
 
         initData();
         displayData();
+
     }
 
     private void initData(){
@@ -98,7 +109,8 @@ public class manageEvent extends AppCompatActivity implements View.OnClickListen
 
         start.setText(convertTimeToString(startTime));
         end.setText(convertTimeToString(endTime));
-        spaceBtn.setText("장소 : " + ((space!=null) ? "지정" : "미지정"));
+       // spaceBtn.setText("장소 : " + ((space!=null) ? "지정" : "미지정"));
+
     }
 
     private Travel getAddResult(){
@@ -191,6 +203,9 @@ public class manageEvent extends AppCompatActivity implements View.OnClickListen
         }
         else if(view==spaceBtn){
             //TODO 지도 연결하기
-        }
+            Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+                startActivity(intent);
+
+       }
     }
 }

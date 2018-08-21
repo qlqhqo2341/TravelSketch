@@ -95,6 +95,18 @@
             app:fab_size="mini"
             app:fab_title="현재위치" />
 
+        //버튼 3 장소추가 버튼
+
+        <com.getbase.floatingactionbutton.AddFloatingActionButton
+            android:id="@+id/ic_place"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_colorNormal="#ffffff"
+            app:fab_colorPressed="#ffffff"
+            android:src="@drawable/ic_add_white"
+            app:fab_size="mini"
+            app:fab_title="장소추가" />
+
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
 

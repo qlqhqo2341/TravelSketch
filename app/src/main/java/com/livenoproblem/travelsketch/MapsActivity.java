@@ -23,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
@@ -110,6 +111,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private GoogleApiClient mGoogleApiClient;
     private PlaceInfo mPlace;
     private Marker mMarker;
+    private String searchString;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -121,6 +123,17 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mPlacePicker = (ImageView) findViewById(R.id.place_picker);
 
         getLocationPermission();
+
+        FloatingActionButton fab0 = findViewById(R.id.ic_place);
+        fab0.setOnClickListener(new View.OnClickListener(){
+
+            public void onClick(View v){
+                Intent intent = new Intent(getApplicationContext(), manageEvent.class);
+                intent.putExtra("place",searchString);
+                startActivity(intent);
+
+            }
+        });
 
     }
 
@@ -216,7 +229,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private void geoLocate(){
         Log.d(TAG, "위치를 찾는 중");
 
-        String searchString = mSearchText.getText().toString();
+        searchString = mSearchText.getText().toString();
 
         Geocoder geocoder = new Geocoder(MapsActivity.this);
         List<Address> list = new ArrayList<>();

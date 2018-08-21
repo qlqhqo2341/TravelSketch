@@ -5,6 +5,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -14,40 +16,56 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
+import com.google.android.gms.gcm.Task;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.wearable.ChannelApi;
+import com.google.firebase.dynamiclinks.DynamicLink;
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
+import com.google.firebase.dynamiclinks.ShortDynamicLink;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.livenoproblem.travelsketch.Common.Common;
 import com.livenoproblem.travelsketch.Helper.Helper;
 import com.livenoproblem.travelsketch.Model.OpenWeatherMap;
+import com.livenoproblem.travelsketch.Struct.Event;
 import com.livenoproblem.travelsketch.Struct.Travel;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONObject;
+
 import java.io.*;
 import java.lang.reflect.Type;
+import java.util.HashMap;
+
+import io.branch.referral.Branch;
+import io.branch.referral.BranchError;
 
 
 public class MainActivity extends AppCompatActivity implements LocationListener {
 
-    TextView txtCity, txtLastUpdate, txtDescription, txtHumidity, txtTime, txtCelsius, txtDesa, txtEmergencyCall;
-
-
+    TextView txtCity, txtLastUpdate, txtDescription, txtHumidity, txtTime, txtCelsius, txtDesa, txtEmergencyCall, txtTrav;
     LocationManager locationManager;
     String provider;
     static double lat, lng;
@@ -55,21 +73,34 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     private String mNum;
     int MY_PERMISSION = 0;
 
+
     File travFile;
     Travel trav;
 
     static final int MANAGE_TRAVEL=1;
-
+    private View header;
+    private LayoutInflater inflater;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //activity_manage_travel 에서 일정 가져오기
+
+
+        //엑티비티 가져오기
+       // inflater = getLayoutInflater();
+       // header = inflater.inflate(R.layout.activity_manage_travel, null);
+        // eventListMain = (LinearLayout)header.findViewById(R.id.eventList);
+
+
+        //공유 동적링크를 활용해서 주고, 받기 가능하도록,.
+
+        //저장한 일정 불러오기
         travFile = new File(getApplicationContext().getFilesDir(),"trav.ser");
         try{
             ObjectInputStream input = new ObjectInputStream(new BufferedInputStream(new FileInputStream(travFile)));
             trav = (Travel)input.readObject();
+            txtTrav.setText((CharSequence) trav); //*//
             input.close();
         }
         catch(Exception e){
@@ -103,12 +134,17 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         fab2.setOnClickListener(new View.OnClickListener(){
 
             public void onClick(View v){
+
+                //일정  공유
+
+
                 Intent myIntent = new Intent(Intent.ACTION_SEND);
                 myIntent.setType("text/plain");
                 String shareBody = "공유 테스트";
                 String ShareSub = "공유 테스트 2";
                 myIntent.putExtra(Intent.EXTRA_SUBJECT, shareBody);
                 myIntent.putExtra(Intent.EXTRA_TEXT,shareBody);
+
                 startActivity(Intent.createChooser(myIntent, "일정공유"));
 
                 showToast("일정공유");
@@ -133,7 +169,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         txtCelsius = (TextView) findViewById(R.id.txtCelsius);
         txtEmergencyCall = (TextView) findViewById(R.id.txtEmergencyCall);
         txtDesa = (TextView) findViewById(R.id.txtDesa);
-
+        txtTrav = (TextView) findViewById(R.id.txtTrav);
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         //provider = locationManager.getBestProvider(new Criteria(), false);
@@ -176,6 +212,26 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
+
+    //딥링크
+    public void onStart() {
+        super.onStart();
+
+        Branch branch = Branch.getInstance(getApplicationContext());
+        branch.initSession(new Branch.BranchReferralInitListener() {
+            @Override
+            public void onInitFinished(JSONObject referringParams, BranchError error) {
+                if(error == null){
+                    Log.i("DeepLinkTest", "deep link data" + referringParams);
+                }
+            }
+        },this.getIntent().getData(),this);
+
+    }
+    public void onStop(){
+        super.onStop();
+        Branch.getInstance(getApplicationContext()).closeSession();
+    }
 
     @Override
     protected void onPause() {
