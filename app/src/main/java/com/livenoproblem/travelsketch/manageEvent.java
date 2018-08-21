@@ -3,30 +3,45 @@ package com.livenoproblem.travelsketch;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
-import android.drm.DrmStore;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.PlaceBuffer;
+import com.google.android.gms.location.places.Places;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.livenoproblem.travelsketch.Struct.Event;
+import com.livenoproblem.travelsketch.Struct.PlaceArrayAdapter;
 import com.livenoproblem.travelsketch.Struct.Travel;
-
+import com.google.android.gms.common.api.ResultCallback;
 
 import java.util.Calendar;
 
-public class manageEvent extends AppCompatActivity implements View.OnClickListener, TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener{
+public class manageEvent extends AppCompatActivity implements View.OnClickListener, TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener,
+        GoogleApiClient.OnConnectionFailedListener,
+        GoogleApiClient.ConnectionCallbacks{
+
+
+
     static final int ADD_EVENT=1,MANAGE_EVENT=2;
 
     Travel trav;
@@ -39,13 +54,35 @@ public class manageEvent extends AppCompatActivity implements View.OnClickListen
 
     Button startTimeBtn,endTimeBtn,spaceBtn;
     MenuItem revertItem;
+    private static final int GOOGLE_API_CLIENT_ID = 0;
+    private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(
+            new LatLng(-40, -168), new LatLng(71, 136));
 
+    private AutoCompleteTextView SearchPlace;
+    private PlaceArrayAdapter mPlaceArrayAdapter;
+    private GoogleApiClient mGoogleApiClient;
     static Location lastLocation = null;
     static String lastAct="자가용 이동 | 렌트카 이동 | 저녁식사 | 장보기";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_event);
+        SearchPlace = (AutoCompleteTextView) findViewById(R.id.spaceText);
+        SearchPlace.setThreshold(3);
+        //SearchPlace.showDropDown();
+
+
+        mGoogleApiClient = new GoogleApiClient.Builder(manageEvent.this)
+                .addApi(Places.GEO_DATA_API)
+                .enableAutoManage(this, GOOGLE_API_CLIENT_ID, this)
+                .addConnectionCallbacks(this)
+                .build();
+
+        SearchPlace.setOnItemClickListener(mAutocompleteClickListener);
+        mPlaceArrayAdapter = new PlaceArrayAdapter(this, android.R.layout.simple_list_item_1,
+                LAT_LNG_BOUNDS, null);
+        SearchPlace.setAdapter(mPlaceArrayAdapter);
+
 
         ActionBar actionBar = getSupportActionBar();
 
@@ -63,6 +100,61 @@ public class manageEvent extends AppCompatActivity implements View.OnClickListen
 
         initData();
         displayData();
+    }
+
+    private AdapterView.OnItemClickListener mAutocompleteClickListener
+            = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            final PlaceArrayAdapter.PlaceAutocomplete item = mPlaceArrayAdapter.getItem(position);
+            final String placeId = String.valueOf(item.placeId);
+
+            PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi
+                    .getPlaceById(mGoogleApiClient, placeId);
+            placeResult.setResultCallback(mUpdatePlaceDetailsCallback);
+
+        }
+    };
+
+    private ResultCallback<PlaceBuffer> mUpdatePlaceDetailsCallback
+            = new ResultCallback<PlaceBuffer>() {
+        @Override
+        public void onResult(PlaceBuffer places) {
+            if (!places.getStatus().isSuccess()) {
+
+                return;
+            }
+            // Selecting the first object buffer.
+            final Place place = places.get(0);
+            CharSequence attributions = places.getAttributions();
+
+
+        }
+    };
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+
+        mPlaceArrayAdapter.setGoogleApiClient(mGoogleApiClient);
+
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        mPlaceArrayAdapter.setGoogleApiClient(null);
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+        Toast.makeText(this,
+                "Google Places API connection failed with error code:" +
+                        connectionResult.getErrorCode(),
+                Toast.LENGTH_LONG).show();
+
     }
 
     private void initData(){
@@ -193,4 +285,6 @@ public class manageEvent extends AppCompatActivity implements View.OnClickListen
             //TODO 지도 연결하기
         }
     }
+
+
 }

@@ -59,6 +59,7 @@ import java.util.List;
 
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback,
+
         GoogleApiClient.OnConnectionFailedListener{
 
     @Override
@@ -88,7 +89,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     private static final String TAG = "MapActivity";
-
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String COURSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
@@ -111,29 +111,18 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private GoogleApiClient mGoogleApiClient;
     private PlaceInfo mPlace;
     private Marker mMarker;
-    private String searchString;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         mSearchText = (AutoCompleteTextView) findViewById(R.id.input_search);
-        mGps = (ImageView) findViewById(R.id.ic_gps);
+        mGps = (ImageView) findViewById(R.id.gps);
         mInfo = (ImageView) findViewById(R.id.place_info);
         mPlacePicker = (ImageView) findViewById(R.id.place_picker);
 
         getLocationPermission();
 
-        FloatingActionButton fab0 = findViewById(R.id.ic_place);
-        fab0.setOnClickListener(new View.OnClickListener(){
-
-            public void onClick(View v){
-                Intent intent = new Intent(getApplicationContext(), manageEvent.class);
-                intent.putExtra("place",searchString);
-                startActivity(intent);
-
-            }
-        });
 
     }
 
@@ -229,7 +218,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private void geoLocate(){
         Log.d(TAG, "위치를 찾는 중");
 
-        searchString = mSearchText.getText().toString();
+        String searchString = mSearchText.getText().toString();
 
         Geocoder geocoder = new Geocoder(MapsActivity.this);
         List<Address> list = new ArrayList<>();

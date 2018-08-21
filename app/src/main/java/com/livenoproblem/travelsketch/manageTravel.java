@@ -34,6 +34,8 @@ public class manageTravel extends AppCompatActivity implements View.OnClickListe
     Travel trav;
     Event managing=null;
     @Override
+
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_travel);
