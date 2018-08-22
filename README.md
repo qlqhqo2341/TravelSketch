@@ -7,4 +7,4 @@ Travel Sketch
 Creator
 ----------
 이정한([github](http://github.com/qlqhqo2341), [네이버블로그](http://qlqhqo2341.blog.me))
-이진호([github](http://github.com/Yeowoolee))
+이진호([github](http://github.com/Yeowoolee), [티스토리](http://yeowool0217.tistory.com))
