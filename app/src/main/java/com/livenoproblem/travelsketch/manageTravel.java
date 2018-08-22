@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.ClipData;
 import android.content.Intent;
 import android.drm.DrmStore;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -98,21 +100,34 @@ public class manageTravel extends AppCompatActivity implements View.OnClickListe
         p.setMargins(margin,margin,margin,margin);
 
         // Inner textview layoutParams.
-        LayoutParams textp = new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT);
-        textp.weight=1.0f;
+        LayoutParams textp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        textp.setMargins(margin,margin,margin,margin);
+
+        if(events.length==0){
+            TextView textView = new TextView(getApplicationContext());
+            textView.setText("이벤트를 추가해주세요.");
+            textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            eventList.addView(textView);
+            return;
+        }
 
         for(Event e : events){
             Calendar date = e.getStartTime();
             if(prevDate == null || Event.compareDate(prevDate,date)!=0) {
                 TextView dateText = new TextView(getApplicationContext());
-                dateText.setText(String.format("%04d-%02d-%02d",
+                String text = String.format("%04d-%02d-%02d (%s요일)",
                         date.get(Calendar.YEAR),
                         date.get(Calendar.MONTH)+1,
-                        date.get(Calendar.DAY_OF_MONTH)));
+                        date.get(Calendar.DAY_OF_MONTH),
+                        new String[]{null,"일","월","화","수","목","금","토"}[date.get(Calendar.DAY_OF_WEEK)]);
+                dateText.setText(text);
                 dateText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                dateText.setTextColor(Color.DKGRAY);
+                dateText.setTypeface(null, Typeface.ITALIC);
                 eventList.addView(dateText,p);
             }
             prevDate = date;
+
 
             LinearLayout eventLayout = new LinearLayout(getApplicationContext());
             eventLayout.setOrientation(LinearLayout.HORIZONTAL);
@@ -122,17 +137,22 @@ public class manageTravel extends AppCompatActivity implements View.OnClickListe
 
             TextView timeText,spaceText,actText;
             timeText = new TextView(getApplicationContext());
-            timeText.setText(e.getStartTimeString() + " ~ \n" + e.getEndTimeString());
             spaceText = new TextView(getApplicationContext());
-            spaceText.setText(e.getSpace()==null ? "미지정" : e.getSpace().toString());
             actText = new TextView(getApplicationContext());
-            actText.setText(e.getAction());
-            eventLayout.addView(timeText,textp);
-            eventLayout.addView(spaceText,textp);
-            eventLayout.addView(actText,textp);
 
+            timeText.setText(e.getStartTimeString() + " ~ \n" + e.getEndTimeString());
+            spaceText.setText(e.getSpace()==null ? "장소\n미지정" : "장소\n지정");
+            actText.setText(e.getAction());
+
+            for(TextView textView : new TextView[]{timeText,spaceText,actText}) {
+                textView.setTextColor(Color.BLACK);
+                eventLayout.addView(textView,textp);
+            }
             eventList.addView(eventLayout,p);
         }
+
+        eventList.addView(new TextView(getApplicationContext()),
+                new LayoutParams(LayoutParams.MATCH_PARENT,(int)(60*dpFactor)));
     }
 
     @Override
@@ -189,9 +209,13 @@ public class manageTravel extends AppCompatActivity implements View.OnClickListe
         initGrid();
     }
 
+    private long backKeyPressedTime = 0;
     @Override
-    protected void onStop() {
-        super.onStop();
-        //TODO 저장여부 한번 더 확인.
+    public void onBackPressed() {
+        if(System.currentTimeMillis()>backKeyPressedTime+2000)
+            Toast.makeText(getApplicationContext(),"현재 수정 사항은 없어집니다. 종료하려면 다시 눌러주세요.",Toast.LENGTH_SHORT).show();
+        else
+            super.onBackPressed();
+        backKeyPressedTime=System.currentTimeMillis();
     }
 }
