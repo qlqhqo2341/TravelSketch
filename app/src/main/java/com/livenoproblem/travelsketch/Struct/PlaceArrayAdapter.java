@@ -29,9 +29,9 @@ public class PlaceArrayAdapter extends ArrayAdapter<PlaceArrayAdapter.PlaceAutoc
     private ArrayList<PlaceAutocomplete> mResultList;
 
 
-    public PlaceArrayAdapter (Context context, int resource, LatLngBounds bounds,
-                             AutocompleteFilter filter) {
-        super(context, resource);
+    public PlaceArrayAdapter (Context context, GoogleApiClient resource, LatLngBounds bounds,
+                              AutocompleteFilter filter) {
+        super(context, android.R.layout.simple_expandable_list_item_2, android.R.id.text1);
         mBounds = bounds;
         mPlaceFilter = filter;
     }

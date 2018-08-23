@@ -79,8 +79,13 @@ public class manageEvent extends AppCompatActivity implements View.OnClickListen
                 .build();
 
         SearchPlace.setOnItemClickListener(mAutocompleteClickListener);
-        mPlaceArrayAdapter = new PlaceArrayAdapter(this, android.R.layout.simple_list_item_1,
+
+        mPlaceArrayAdapter = new PlaceArrayAdapter(this, mGoogleApiClient,
                 LAT_LNG_BOUNDS, null);
+
+
+//       mPlaceArrayAdapter = new PlaceArrayAdapter(this, android.R.layout.simple_list_item_1,
+//                LAT_LNG_BOUNDS, null);
         SearchPlace.setAdapter(mPlaceArrayAdapter);
 
 
