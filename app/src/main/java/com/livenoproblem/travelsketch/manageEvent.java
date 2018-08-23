@@ -3,7 +3,6 @@ package com.livenoproblem.travelsketch;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -49,7 +48,7 @@ public class manageEvent extends AppCompatActivity implements View.OnClickListen
     int commandCode;
 
     Calendar startTime,endTime;
-    Location space;
+    String spaceId, spaceDescription;
     TextView actText;
 
     Button startTimeBtn,endTimeBtn,spaceBtn;
@@ -61,7 +60,7 @@ public class manageEvent extends AppCompatActivity implements View.OnClickListen
     private AutoCompleteTextView SearchPlace;
     private PlaceArrayAdapter mPlaceArrayAdapter;
     private GoogleApiClient mGoogleApiClient;
-    static Location lastLocation = null;
+    static String lastLocation = null;
     static String lastAct="자가용 이동 | 렌트카 이동 | 저녁식사 | 장보기";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,7 +132,8 @@ public class manageEvent extends AppCompatActivity implements View.OnClickListen
             // Selecting the first object buffer.
             final Place place = places.get(0);
             CharSequence attributions = places.getAttributions();
-
+            spaceId = place.getId();
+            spaceDescription = place.getName().toString();
 
         }
     };
@@ -168,13 +168,16 @@ public class manageEvent extends AppCompatActivity implements View.OnClickListen
                 startTime = trav.getLastTime();
                 endTime = (Calendar)startTime.clone();
                 endTime.add(Calendar.HOUR_OF_DAY,1);
-                space = null;
+                spaceId = lastLocation;
                 actText.setText(lastAct);
                 break;
             case MANAGE_EVENT:
                 startTime = event.getStartTime();
                 endTime = event.getEndTime();
-                space = event.getSpace();
+                if(event.getSpace()!=null) {
+                    spaceId = event.getSpace().id;
+                    spaceDescription = event.getSpace().description;
+                }
                 actText.setText(event.getAction());
                 break;
         }
@@ -191,11 +194,10 @@ public class manageEvent extends AppCompatActivity implements View.OnClickListen
         TextView start=findViewById(R.id.startTimeText),
                 end=findViewById(R.id.endTimeText),
                 act=findViewById(R.id.actText);
-        Button spaceBtn = findViewById(R.id.spaceBtn);
-
+        AutoCompleteTextView spaceText = findViewById(R.id.spaceText);
         start.setText(convertTimeToString(startTime));
         end.setText(convertTimeToString(endTime));
-        spaceBtn.setText("장소 : " + ((space!=null) ? "지정" : "미지정"));
+        spaceText.setText(spaceDescription);
     }
 
     private Travel getAddResult(){
@@ -208,7 +210,7 @@ public class manageEvent extends AppCompatActivity implements View.OnClickListen
     }
 
     private Event makeEvent(){
-        return new Event(startTime, endTime,space, actText.getText().toString());
+        return new Event(startTime, endTime, spaceId,spaceDescription, actText.getText().toString());
     }
 
     @Override
@@ -228,7 +230,7 @@ public class manageEvent extends AppCompatActivity implements View.OnClickListen
         switch(item.getItemId()){
             case R.id.action_finish:
                 lastAct = actText.getText().toString();
-                lastLocation = space;
+                lastLocation = spaceId;
                 intent.putExtra("event",makeEvent());
                 setResult(RESULT_OK,intent);
                 finish();
@@ -256,9 +258,6 @@ public class manageEvent extends AppCompatActivity implements View.OnClickListen
             onOptionsItemSelected(revertItem);
         backKeyPressedTime=System.currentTimeMillis();
     }
-
-
-
 
     private Calendar control;
     @Override
