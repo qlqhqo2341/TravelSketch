@@ -133,9 +133,8 @@ public class manageTravel extends AppCompatActivity implements View.OnClickListe
             actText = new TextView(getApplicationContext());
 
             timeText.setText(e.getStartTimeString() + " ~ \n" + e.getEndTimeString());
-            spaceText.setText("장소\n"+
-                    ( (e.getSpace()!=null) ? e.getSpace().description : "미지정" ));
-            actText.setText(e.getAction());
+            String spaceStr = "장소 : " + ( (e.getSpace()!=null) ? e.getSpace().description : "미지정");
+            actText.setText(spaceStr + "\n" + e.getAction());
 
             for(TextView textView : new TextView[]{timeText,spaceText,actText}) {
                 textView.setTextColor(Color.BLACK);

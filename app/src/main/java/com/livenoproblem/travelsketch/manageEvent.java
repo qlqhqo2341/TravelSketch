@@ -60,7 +60,7 @@ public class manageEvent extends AppCompatActivity implements View.OnClickListen
     private AutoCompleteTextView SearchPlace;
     private PlaceArrayAdapter mPlaceArrayAdapter;
     private GoogleApiClient mGoogleApiClient;
-    static String lastLocation = null;
+    static String lastLocationId=null,lastLocationDescription = null;
     static String lastAct="자가용 이동 | 렌트카 이동 | 저녁식사 | 장보기";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -168,7 +168,8 @@ public class manageEvent extends AppCompatActivity implements View.OnClickListen
                 startTime = trav.getLastTime();
                 endTime = (Calendar)startTime.clone();
                 endTime.add(Calendar.HOUR_OF_DAY,1);
-                spaceId = lastLocation;
+                spaceId = lastLocationId;
+                spaceDescription = lastLocationDescription;
                 actText.setText(lastAct);
                 break;
             case MANAGE_EVENT:
@@ -230,7 +231,8 @@ public class manageEvent extends AppCompatActivity implements View.OnClickListen
         switch(item.getItemId()){
             case R.id.action_finish:
                 lastAct = actText.getText().toString();
-                lastLocation = spaceId;
+                lastLocationId = spaceId;
+                lastLocationDescription = spaceDescription;
                 intent.putExtra("event",makeEvent());
                 setResult(RESULT_OK,intent);
                 finish();

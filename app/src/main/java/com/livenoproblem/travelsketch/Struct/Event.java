@@ -81,7 +81,7 @@ public class Event implements Serializable, Comparable<Event>{
 
     public Space getSpace() {
         return space;
-    }
+}
 
     @Override
     public int compareTo(@NonNull Event event) {
@@ -100,15 +100,4 @@ public class Event implements Serializable, Comparable<Event>{
         return oned.compareTo(twod);
     }
 
-    public class Space implements Serializable{
-        public final String id, description;
-        public Space(String id, String description){
-            this.id=id; this.description=description;
-        }
-
-        @Override
-        public String toString() {
-            return description.toString();
-        }
-    }
 }
