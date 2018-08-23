@@ -1,17 +1,12 @@
 package com.livenoproblem.travelsketch;
 
-import android.app.Activity;
-import android.content.ClipData;
 import android.content.Intent;
-import android.drm.DrmStore;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Layout;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
@@ -25,7 +20,6 @@ import android.widget.Toast;
 import com.livenoproblem.travelsketch.Struct.Event;
 import com.livenoproblem.travelsketch.Struct.Travel;
 
-import java.sql.Date;
 import java.util.Calendar;
 import java.util.HashMap;
 
@@ -35,9 +29,8 @@ public class manageTravel extends AppCompatActivity implements View.OnClickListe
 
     Travel trav;
     Event managing=null;
+
     @Override
-
-
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_travel);
@@ -128,7 +121,6 @@ public class manageTravel extends AppCompatActivity implements View.OnClickListe
             }
             prevDate = date;
 
-
             LinearLayout eventLayout = new LinearLayout(getApplicationContext());
             eventLayout.setOrientation(LinearLayout.HORIZONTAL);
             eventLayout.setOnClickListener(this);
@@ -141,7 +133,8 @@ public class manageTravel extends AppCompatActivity implements View.OnClickListe
             actText = new TextView(getApplicationContext());
 
             timeText.setText(e.getStartTimeString() + " ~ \n" + e.getEndTimeString());
-            spaceText.setText(e.getSpace()==null ? "장소\n미지정" : "장소\n지정");
+            spaceText.setText("장소\n"+
+                    ( (e.getSpace()!=null) ? e.getSpace().description : "미지정" ));
             actText.setText(e.getAction());
 
             for(TextView textView : new TextView[]{timeText,spaceText,actText}) {

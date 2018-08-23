@@ -1,6 +1,5 @@
 package com.livenoproblem.travelsketch.Struct;
 
-import android.location.Location;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -10,13 +9,14 @@ import java.util.Calendar;
 
 public class Event implements Serializable, Comparable<Event>{
     private Calendar startTime,endTime;
-    private Location space;
+    private Space space;
     private String action;
 
-    public Event(Calendar startTime, Calendar endTime,Location space, String action) {
+
+    public Event(Calendar startTime, Calendar endTime, String spaceId, String spaceDescription, String action) {
         this.startTime = startTime;
         this.endTime = endTime;
-        this.space = space;
+        this.space = new Space(spaceId,spaceDescription);
         this.action = action;
         timeCheck();
     }
@@ -25,7 +25,7 @@ public class Event implements Serializable, Comparable<Event>{
         startTime.set(Calendar.SECOND,0);
         endTime = (Calendar)startTime.clone();
         endTime.add(Calendar.SECOND,3);
-        space = new Location("gps");
+        space = null;
         action = "default";
     }
     private void timeCheck(){
@@ -43,7 +43,7 @@ public class Event implements Serializable, Comparable<Event>{
         String AMPM = (time.get(Calendar.AM_PM)==Calendar.AM) ? "AM" : "PM";
         if(hour==0) hour=12;
         return String.format("%2s %02d:%02d",AMPM,hour,time.get(Calendar.MINUTE));
-}
+    }
     public Calendar getStartTime(){
         return startTime;
     }
@@ -70,16 +70,17 @@ public class Event implements Serializable, Comparable<Event>{
         timeCheck();
     }
 
-    public Location getSpace() {
-        return space;
-    }
-
     public String getAction() {
         return action;
     }
 
     public void setAction(String action) {
         this.action = action;
+    }
+
+
+    public Space getSpace() {
+        return space;
     }
 
     @Override
@@ -97,5 +98,17 @@ public class Event implements Serializable, Comparable<Event>{
                 two.get(Calendar.MONTH)+1,
                 two.get(Calendar.DAY_OF_MONTH)));
         return oned.compareTo(twod);
+    }
+
+    public class Space implements Serializable{
+        public final String id, description;
+        public Space(String id, String description){
+            this.id=id; this.description=description;
+        }
+
+        @Override
+        public String toString() {
+            return description.toString();
+        }
     }
 }
