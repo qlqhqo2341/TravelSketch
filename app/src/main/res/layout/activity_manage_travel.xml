@@ -23,16 +23,53 @@
             android:orientation="vertical"></LinearLayout>
     </ScrollView>
 
-    <android.support.design.widget.FloatingActionButton
+    <!--<android.support.design.widget.FloatingActionButton-->
+        <!--android:id="@+id/addEventBtn"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginBottom="16dp"-->
+        <!--android:layout_marginRight="16dp"-->
+        <!--android:clickable="true"-->
+        <!--android:src="@drawable/ic_add_white"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--app:layout_constraintRight_toRightOf="parent" />-->
+
+    <com.getbase.floatingactionbutton.FloatingActionsMenu
+        android:id="@+id/fab_Menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        app:fab_addButtonColorNormal="#3f51b5"
+        app:fab_addButtonColorPressed="#BBDEFB"
+        app:fab_addButtonPlusIconColor="#ffffff "
+        app:fab_labelStyle="@style/custom_fab"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent" >
+    //버튼 0 이벤트 추가
+
+    <com.getbase.floatingactionbutton.AddFloatingActionButton
         android:id="@+id/addEventBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginRight="16dp"
-        android:clickable="true"
         android:src="@drawable/ic_add_white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:fab_colorNormal="#ffffff"
+        app:fab_colorPressed="#ffffff"
+        app:fab_size="mini"
+        app:fab_title="이벤트추가" />
+
+    //버튼 1 일정 공유
+
+    <com.getbase.floatingactionbutton.AddFloatingActionButton
+        android:id="@+id/fab_action1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_share_white"
+        app:fab_colorNormal="#ffffff"
+        app:fab_colorPressed="#ffffff"
+        app:fab_size="mini"
+        app:fab_title="일정공유" />
+    </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
 
 </android.support.constraint.ConstraintLayout>

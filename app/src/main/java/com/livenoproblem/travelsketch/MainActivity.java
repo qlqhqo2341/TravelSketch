@@ -99,21 +99,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 showToast("일정추가");
             }
         });
-        FloatingActionButton fab2 = findViewById(R.id.fab_action2);
-        fab2.setOnClickListener(new View.OnClickListener(){
 
-            public void onClick(View v){
-                Intent myIntent = new Intent(Intent.ACTION_SEND);
-                myIntent.setType("text/plain");
-                String shareBody = "공유 테스트";
-                String ShareSub = "공유 테스트 2";
-                myIntent.putExtra(Intent.EXTRA_SUBJECT, shareBody);
-                myIntent.putExtra(Intent.EXTRA_TEXT,shareBody);
-                startActivity(Intent.createChooser(myIntent, "일정공유"));
-
-                showToast("일정공유");
-            }
-        });
         FloatingActionButton fab3 = findViewById(R.id.fab_action3);
         fab3.setOnClickListener(new View.OnClickListener(){
 

@@ -196,17 +196,6 @@
             app:fab_size="mini"
             app:fab_title="일정추가" />
 
-        //버튼 2 일정공유 버튼
-
-        <com.getbase.floatingactionbutton.AddFloatingActionButton
-            android:id="@+id/fab_action2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_share_white"
-            app:fab_colorNormal="#ffffff"
-            app:fab_colorPressed="#ffffff"
-            app:fab_size="mini"
-            app:fab_title="일정공유" />
 
         //버튼 3 목적지찾기 버튼
 

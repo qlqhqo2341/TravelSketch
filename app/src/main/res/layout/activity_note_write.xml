@@ -29,32 +29,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-
-        <com.getbase.floatingactionbutton.FloatingActionsMenu
-            android:id="@+id/fab_Menu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            app:fab_addButtonColorNormal="#3f51b5"
-            app:fab_addButtonColorPressed="#BBDEFB"
-            app:fab_addButtonPlusIconColor="#ffffff "
-            app:fab_labelStyle="@style/custom_fab">
-
-        //버튼 0 저장
-
-        <com.getbase.floatingactionbutton.AddFloatingActionButton
-            android:id="@+id/fab_action0"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_save"
-            app:fab_colorNormal="#ffffff"
-            app:fab_colorPressed="#ffffff"
-            app:fab_size="mini"
-            app:fab_title="저장" />
-
-        </com.getbase.floatingactionbutton.FloatingActionsMenu>
-
     </RelativeLayout>
 
 </RelativeLayout>

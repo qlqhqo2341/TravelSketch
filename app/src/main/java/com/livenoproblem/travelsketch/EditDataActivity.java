@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -43,39 +45,63 @@ public class EditDataActivity extends AppCompatActivity {
         editable_item.setText(selectedName);
 
 
-        // 플로팅 액션 버튼
-        FloatingActionButton fab0 = findViewById(R.id.fab_action0);
-        fab0.setOnClickListener(new View.OnClickListener(){
+    }
 
-            public void onClick(View v){
-                String item = editable_item.getText().toString();
-                if(!item.equals("")){
-                    mDatabaseHelper.updateName(item,selectedID,selectedName);
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.note_menu, menu);
 
-                    Intent intent = new Intent(EditDataActivity.this, ListDataActivity.class);
-                    startActivity(intent);
-                }else{
-                    toastMessage("내용을 입력해주세요");
-                }
-            }
-        });
+        MenuItem removeItem = menu.findItem(R.id.action_remove);
+        removeItem.setVisible(true);
 
-        FloatingActionButton fab1 = findViewById(R.id.fab_action1);
-        fab1.setOnClickListener(new View.OnClickListener(){
+        MenuItem saveItem = menu.findItem(R.id.action_save);
+        saveItem.setVisible(true);
 
-            public void onClick(View v){
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuitem) {
+        switch(menuitem.getItemId()){
+            case R.id.action_remove:
                 mDatabaseHelper.deleteName(selectedID,selectedName);
                 editable_item.setText("");
                 Intent intent = new Intent(EditDataActivity.this, ListDataActivity.class);
                 startActivity(intent);
                 toastMessage("리스트삭제");
-            }
+                finish();
+                break;
+            case R.id.action_save:
+                String item = editable_item.getText().toString();
+                if(!item.equals("")){
+                    mDatabaseHelper.updateName(item,selectedID,selectedName);
 
-        });
-
+                    Intent intent1 = new Intent(EditDataActivity.this, ListDataActivity.class);
+                    startActivity(intent1);
+                }else{
+                    toastMessage("내용을 입력해주세요");
+                }
+                finish();
+                break;
+            default:
+                return super.onOptionsItemSelected(menuitem);
+        }
+        return true;
     }
+
 
     private void toastMessage(String message){
         Toast.makeText(this,message, Toast.LENGTH_SHORT).show();
     }
+
+    private long backKeyPressedTime = 0;
+    @Override
+    public void onBackPressed() {
+        if(System.currentTimeMillis()>backKeyPressedTime+2000)
+            Toast.makeText(getApplicationContext(),"현재 수정 사항은 없어집니다. 종료하려면 다시 눌러주세요.",Toast.LENGTH_SHORT).show();
+        else
+            super.onBackPressed();
+        backKeyPressedTime=System.currentTimeMillis();
+    }
+
 }

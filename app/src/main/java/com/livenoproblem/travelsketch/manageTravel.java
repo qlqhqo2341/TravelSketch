@@ -35,6 +35,22 @@ public class manageTravel extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_travel);
 
+        com.getbase.floatingactionbutton.FloatingActionButton fab1 = findViewById(R.id.fab_action1);
+        fab1.setOnClickListener(new View.OnClickListener(){
+
+            public void onClick(View v){
+                Intent myIntent = new Intent(Intent.ACTION_SEND);
+                myIntent.setType("text/plain");
+                String shareBody = "TravelSketch";
+                String ShareSub = "일정공유";
+                myIntent.putExtra(Intent.EXTRA_SUBJECT, shareBody); //주제
+                myIntent.putExtra(Intent.EXTRA_TEXT,ShareSub); //제목
+                startActivity(Intent.createChooser(myIntent, "일정공유"));
+
+
+            }
+        });
+
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle("일정 관리");
 
@@ -44,7 +60,7 @@ public class manageTravel extends AppCompatActivity implements View.OnClickListe
         dpFactor=displayMetrics.density;
         Log.i("TEST","dpFactor : " + dpFactor);
 
-        ((FloatingActionButton)findViewById(R.id.addEventBtn)).setOnClickListener(this);
+        ((com.getbase.floatingactionbutton.FloatingActionButton)findViewById(R.id.addEventBtn)).setOnClickListener(this);
 
         Intent receive = getIntent();
         trav = (Travel) receive.getSerializableExtra("travel");

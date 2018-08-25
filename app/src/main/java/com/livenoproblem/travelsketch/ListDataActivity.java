@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -34,27 +36,40 @@ public class ListDataActivity extends AppCompatActivity {
 
         populateListView();
 
-        // 플로팅 액션 버튼
-        FloatingActionButton fab0 = findViewById(R.id.fab_action0);
-        fab0.setOnClickListener(new View.OnClickListener(){
-
-            public void onClick(View v){
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        FloatingActionButton fab1 = findViewById(R.id.fab_action1);
-        fab1.setOnClickListener(new View.OnClickListener(){
-
-            public void onClick(View v){
-                Intent intent = new Intent(getApplicationContext(), MakeDataActivity.class);
-                startActivity(intent);
-            }
-        });
-
 
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.note_menu, menu);
+
+        MenuItem addItem = menu.findItem(R.id.action_add);
+        addItem.setVisible(true);
+
+        MenuItem homeItem = menu.findItem(R.id.action_home);
+        homeItem.setVisible(true);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()){
+            case R.id.action_add:
+                Intent intent = new Intent(getApplicationContext(), MakeDataActivity.class);
+                startActivity(intent);
+                finish();
+                break;
+            case R.id.action_home:
+                Intent intent1 = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent1);
+                finish();
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        return true;
+    }
+
 
     private void populateListView() {
         Log.d(TAG, "리스트뷰에 아이템 출력");
