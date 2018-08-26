@@ -30,6 +30,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.livenoproblem.travelsketch.Struct.Event;
 import com.livenoproblem.travelsketch.Struct.PlaceArrayAdapter;
+import com.livenoproblem.travelsketch.Struct.Space;
 import com.livenoproblem.travelsketch.Struct.Travel;
 import com.google.android.gms.common.api.ResultCallback;
 
@@ -295,7 +296,9 @@ public class manageEvent extends AppCompatActivity implements View.OnClickListen
             datePickerDialog.show();
         }
         else if(view==spaceBtn){
-            //TODO 지도 연결하기
+            Intent intent = new Intent(this, MapsActivity.class);
+            intent.putExtra("space",new Space(spaceId,spaceDescription));
+            startActivity(intent);
         }
     }
 

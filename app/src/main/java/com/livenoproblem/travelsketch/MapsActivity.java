@@ -33,8 +33,10 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.AutocompletePrediction;
+import com.google.android.gms.location.places.GeoDataClient;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceBuffer;
+import com.google.android.gms.location.places.PlaceBufferResponse;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -50,6 +52,7 @@ import com.google.android.gms.tasks.Task;
 import com.livenoproblem.travelsketch.Modules.PlaceInfo;
 import com.livenoproblem.travelsketch.Struct.CustomInfoWindowAdapter;
 import com.livenoproblem.travelsketch.Struct.PlaceAutocompleteAdapter;
+import com.livenoproblem.travelsketch.Struct.Space;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -74,7 +77,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap = googleMap;
 
         if (mLocationPermissionsGranted) {
-            getDeviceLocation();
+            if(getIntent().getSerializableExtra("space")==null)
+                getDeviceLocation();
 
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                     != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
@@ -112,6 +116,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private PlaceInfo mPlace;
     private Marker mMarker;
 
+
+    private boolean needToCurrentLocation=true;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -123,7 +129,27 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         getLocationPermission();
 
-
+        //인텐트에 위치정보가 있는지 확인하고 움직이기.
+        Intent intent = getIntent();
+        Space space = (Space)intent.getSerializableExtra("space");
+        if(space!=null){
+            GeoDataClient geoDataClient = Places.getGeoDataClient(this,null);
+            geoDataClient.getPlaceById(space.id).addOnCompleteListener(new OnCompleteListener<PlaceBufferResponse>() {
+                @Override
+                public void onComplete(@NonNull Task<PlaceBufferResponse> task) {
+                    if(task.isSuccessful()){
+                        Log.i(TAG,"Start get");
+                        needToCurrentLocation=false;
+                        PlaceBufferResponse response = task.getResult();
+                        Place place = response.get(0);
+                        moveCamera(place.getLatLng(),DEFAULT_ZOOM,place.getName().toString());
+                        response.release();
+                    } else {
+                        Log.e("MapsActivity","Can't get the place");
+                    }
+                }
+            });
+        }
     }
 
     private void init(){
