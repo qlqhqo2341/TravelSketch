@@ -86,7 +86,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             e.printStackTrace();
             trav = new Travel();
         }
-//        setCurrentEvent();
         initMainTravel();
 
         // 플로팅 액션 버튼
@@ -226,7 +225,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         if(requestCode==MANAGE_TRAVEL && resultCode==RESULT_OK){
             this.trav = (Travel)data.getSerializableExtra("travel");
             travelSave();
-//            setCurrentEvent();
             initMainTravel();
         }
     }
@@ -493,7 +491,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     private void initMainTravel(){
         ScrollView scrollView = findViewById(R.id.scrollView);
         LinearLayout scrollLayout = findViewById(R.id.scrollLayout);
-        int scrollX=-1,scrollY=-1;
 
         scrollLayout.removeAllViews();
         Event prev=null;
@@ -508,6 +505,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         }
 
         for(Event e : trav.getEvents()){
+            if(e.compareTimeTo(now)>0)
+                continue; //이미 종료된 이벤트는 표시하지 않음.
+
             if(prev==null || Event.compareDate(prev.getStartTime(),e.getStartTime())!=0){
                 TextView dateView = new TextView(this);
                 dateView.setText(Event.getDateString(e.getStartTime()) + "\n");
@@ -524,18 +524,25 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                     e.getAction()));
             eventView.setTextColor(Color.BLACK);
             eventView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-            if(e.compareTimeTo(now)==0){
+            eventView.setOnClickListener(new eventClickListener(e));
+            if(e.compareTimeTo(now)==0)
                 eventView.setTextColor(Color.MAGENTA);
-                scrollX = 0;
-                scrollY = scrollLayout.getHeight();
-                Log.d("MAIN",String.format("%d %d scroll",scrollX,scrollY));
-            }
             scrollLayout.addView(eventView);
             prev=e;
         }
+    }
+    private class eventClickListener implements View.OnClickListener{
+        Event e;
+        public eventClickListener(Event e){
+            this.e=e;
+        }
 
-        //현재 이벤트로 자동 스크롤 TODO
-        if(scrollX>-1)
-            scrollView.scrollTo(scrollX,scrollY);
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+            if(e!=null)
+                intent.putExtra("space",e.getSpace());
+            startActivity(intent);
+        }
     }
 }

@@ -297,7 +297,8 @@ public class manageEvent extends AppCompatActivity implements View.OnClickListen
         }
         else if(view==spaceBtn){
             Intent intent = new Intent(this, MapsActivity.class);
-            intent.putExtra("space",new Space(spaceId,spaceDescription));
+            if(spaceId!=null)
+                intent.putExtra("space",new Space(spaceId,spaceDescription));
             startActivity(intent);
         }
     }
