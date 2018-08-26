@@ -1,10 +1,15 @@
 package com.livenoproblem.travelsketch;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
@@ -12,14 +17,19 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.livenoproblem.travelsketch.Struct.Event;
 import com.livenoproblem.travelsketch.Struct.Travel;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.Calendar;
 import java.util.HashMap;
 
@@ -29,24 +39,48 @@ public class manageTravel extends AppCompatActivity implements View.OnClickListe
 
     Travel trav;
     Event managing=null;
+    private ScrollView container;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_travel);
+        container = (ScrollView)findViewById(R.id.scrollView);
+
 
         com.getbase.floatingactionbutton.FloatingActionButton fab1 = findViewById(R.id.fab_action1);
         fab1.setOnClickListener(new View.OnClickListener(){
 
             public void onClick(View v){
+                //캡처
+                container.buildDrawingCache();
+                Bitmap captureView = container.getDrawingCache();
+                FileOutputStream fos;
+
+                try{
+                    fos = new FileOutputStream(Environment.getExternalStorageDirectory().toString()+"/capture.jpeg");
+                    captureView.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+                    Toast.makeText(getApplicationContext(), "캡쳐성공!", Toast.LENGTH_LONG).show();
+
+                } catch (FileNotFoundException e){
+                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(), "캡쳐실패", Toast.LENGTH_LONG).show();
+
+                }
+
+                //전송부분
+                //Uri uri = Uri.fromFile(new File(Environment.getExternalStorageDirectory().toString()+"/capture.jpeg"));
+                Uri uri = FileProvider.getUriForFile(getApplicationContext(),"com.livenoproblem.travelsketch.fileprovider", new File(Environment.getExternalStorageDirectory().toString()+"/capture.jpeg"));
                 Intent myIntent = new Intent(Intent.ACTION_SEND);
                 myIntent.setType("text/plain");
                 String shareBody = "TravelSketch";
                 String ShareSub = "일정공유";
                 myIntent.putExtra(Intent.EXTRA_SUBJECT, shareBody); //주제
                 myIntent.putExtra(Intent.EXTRA_TEXT,ShareSub); //제목
+                myIntent.putExtra(Intent.EXTRA_STREAM, uri);
+                myIntent.setType("image/*");
                 startActivity(Intent.createChooser(myIntent, "일정공유"));
-
+                //카카오톡에서는 이미지만 전송됨
 
             }
         });
