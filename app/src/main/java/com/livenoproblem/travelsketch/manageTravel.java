@@ -124,11 +124,7 @@ public class manageTravel extends AppCompatActivity implements View.OnClickListe
             Calendar date = e.getStartTime();
             if(prevDate == null || Event.compareDate(prevDate,date)!=0) {
                 TextView dateText = new TextView(getApplicationContext());
-                String text = String.format("%04d-%02d-%02d (%s요일)",
-                        date.get(Calendar.YEAR),
-                        date.get(Calendar.MONTH)+1,
-                        date.get(Calendar.DAY_OF_MONTH),
-                        new String[]{null,"일","월","화","수","목","금","토"}[date.get(Calendar.DAY_OF_WEEK)]);
+                String text = Event.getDateString(date);
                 dateText.setText(text);
                 dateText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                 dateText.setTextColor(Color.DKGRAY);

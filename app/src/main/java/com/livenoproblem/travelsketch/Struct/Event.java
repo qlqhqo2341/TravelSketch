@@ -16,7 +16,7 @@ public class Event implements Serializable, Comparable<Event>{
     public Event(Calendar startTime, Calendar endTime, String spaceId, String spaceDescription, String action) {
         this.startTime = startTime;
         this.endTime = endTime;
-        this.space = new Space(spaceId,spaceDescription);
+        this.space = (spaceId!=null) ? new Space(spaceId,spaceDescription) : null;
         this.action = action;
         timeCheck();
     }
@@ -87,7 +87,6 @@ public class Event implements Serializable, Comparable<Event>{
     public int compareTo(@NonNull Event event) {
         return startTime.compareTo(event.getStartTime());
     }
-
     public static int compareDate(Calendar one, Calendar two){
         Date oned = Date.valueOf(String.format("%04d-%02d-%02d",
                 one.get(Calendar.YEAR),
@@ -99,5 +98,28 @@ public class Event implements Serializable, Comparable<Event>{
                 two.get(Calendar.DAY_OF_MONTH)));
         return oned.compareTo(twod);
     }
+    public static String getDateString(Calendar date){
+        return String.format("%04d-%02d-%02d (%s요일)",
+                date.get(Calendar.YEAR),
+                date.get(Calendar.MONTH)+1,
+                date.get(Calendar.DAY_OF_MONTH),
+                new String[]{null,"일","월","화","수","목","금","토"}[date.get(Calendar.DAY_OF_WEEK)]);
+    }
+    public int compareTimeTo(Calendar now){
+        //시간을 기준으로 이벤트의 상태를 반환
+        //시작전 -1, 진행중 0, 종료후 1
 
+        boolean overStart = now.compareTo(startTime)>=0,
+                overEnd = now.compareTo(endTime)>=0;
+        if(!overStart && !overEnd)
+            return -1;
+        else if(overStart && overEnd)
+            return 1;
+        else if(overStart && !overEnd)
+            return 0;
+        else{
+            Log.e("Event","guess to end time is before start.");
+            return 0;
+        }
+    }
 }

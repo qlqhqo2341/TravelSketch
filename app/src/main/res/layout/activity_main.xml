@@ -141,19 +141,15 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/labelLayout"
         android:background="#C5Cae9"
         tools:layout_editor_absoluteX="8dp">
 
 
-        <TextView
-            android:id="@+id/txtTrav"
+        <LinearLayout
+            android:id="@+id/scrollLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginBottom="181dp"
-            android:text="TextView" />
+            android:orientation="vertical"></LinearLayout>
     </ScrollView>
 
 

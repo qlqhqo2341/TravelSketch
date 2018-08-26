@@ -5,6 +5,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -20,12 +22,15 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,11 +41,15 @@ import com.google.gson.reflect.TypeToken;
 import com.livenoproblem.travelsketch.Common.Common;
 import com.livenoproblem.travelsketch.Helper.Helper;
 import com.livenoproblem.travelsketch.Model.OpenWeatherMap;
+import com.livenoproblem.travelsketch.Struct.Event;
 import com.livenoproblem.travelsketch.Struct.Travel;
 import com.squareup.picasso.Picasso;
 
+import org.w3c.dom.Text;
+
 import java.io.*;
 import java.lang.reflect.Type;
+import java.util.Calendar;
 
 
 public class MainActivity extends AppCompatActivity implements LocationListener {
@@ -77,6 +86,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             e.printStackTrace();
             trav = new Travel();
         }
+//        setCurrentEvent();
+        initMainTravel();
 
         // 플로팅 액션 버튼
         FloatingActionButton fab0 = findViewById(R.id.fab_action0);
@@ -143,15 +154,15 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
 
 
-        Location location = locationManager.getLastKnownLocation(provider);
-        if (location == null)
-            Log.e("TAG", "No Location");
-            if (locationManager.isProviderEnabled(locationManager.NETWORK_PROVIDER) == true) {
-                provider = LocationManager.NETWORK_PROVIDER;
-            } else
-                provider = LocationManager.GPS_PROVIDER;
+            Location location = locationManager.getLastKnownLocation(provider);
+            if (location == null)
+                Log.e("TAG", "No Location");
+                if (locationManager.isProviderEnabled(locationManager.NETWORK_PROVIDER) == true) {
+                    provider = LocationManager.NETWORK_PROVIDER;
+                } else
+                    provider = LocationManager.GPS_PROVIDER;
 
-    }
+        }
 
     }
 
@@ -215,7 +226,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         if(requestCode==MANAGE_TRAVEL && resultCode==RESULT_OK){
             this.trav = (Travel)data.getSerializableExtra("travel");
             travelSave();
-            //TODO 수정된 Travel이 화면에 적용 시켜야함.
+//            setCurrentEvent();
+            initMainTravel();
         }
     }
 
@@ -442,5 +454,88 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             return false;
         }
         return true;
+    }
+
+    private void setCurrentEvent(){
+        Event[] events = trav.getEvents();
+        Event current=null,next=null;
+        Calendar now = Calendar.getInstance();
+
+
+        for(Event e : events){
+            int compareResult = e.compareTimeTo(now);
+            if(compareResult==0){
+                if(current!=null) Log.e("setCurrentEvent","overwrite current event. ");
+                current=e;
+            }
+            else if(compareResult>0 && next==null)
+                next=e;
+        }
+
+        StringBuilder result = new StringBuilder();
+        if(current!=null)
+            result.append("현재 일정 : \n" +
+                String.format("%s ~ %s\n%s",current.getStartTimeString(),current.getEndTimeString(),
+                        current.getAction()));
+        if(next!=null)
+            result.append("다음 일정 : \n" +
+                String.format("%s ~ %s\n%s",next.getStartTimeString(),next.getEndTimeString(),
+                        next.getAction()));
+
+        if(current==null && next==null){
+            if(events.length==0)
+                result.append("일정이 비어있습니다.");
+            else
+                result.append("모든 일정이 완료 되었습니다.");
+        }
+    }
+
+    private void initMainTravel(){
+        ScrollView scrollView = findViewById(R.id.scrollView);
+        LinearLayout scrollLayout = findViewById(R.id.scrollLayout);
+        int scrollX=-1,scrollY=-1;
+
+        scrollLayout.removeAllViews();
+        Event prev=null;
+        Calendar now = Calendar.getInstance();
+
+        if(trav.getEvents().length==0){
+            TextView textView = new TextView(this);
+            textView.setText("일정이 비어있습니다.");
+            textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            scrollLayout.addView(textView);
+            return;
+        }
+
+        for(Event e : trav.getEvents()){
+            if(prev==null || Event.compareDate(prev.getStartTime(),e.getStartTime())!=0){
+                TextView dateView = new TextView(this);
+                dateView.setText(Event.getDateString(e.getStartTime()) + "\n");
+                dateView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                dateView.setTypeface(null, Typeface.ITALIC);
+                dateView.setTextColor(Color.DKGRAY);
+                scrollLayout.addView(dateView);
+            }
+
+            TextView eventView = new TextView(this);
+            eventView.setText(String.format("%s ~ %s\n장소 : %s\n%s\n",
+                    e.getStartTimeString(), e.getEndTimeString(),
+                    ((e.getSpace()!=null) ? e.getSpace().description : "미지정"),
+                    e.getAction()));
+            eventView.setTextColor(Color.BLACK);
+            eventView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            if(e.compareTimeTo(now)==0){
+                eventView.setTextColor(Color.MAGENTA);
+                scrollX = 0;
+                scrollY = scrollLayout.getHeight();
+                Log.d("MAIN",String.format("%d %d scroll",scrollX,scrollY));
+            }
+            scrollLayout.addView(eventView);
+            prev=e;
+        }
+
+        //현재 이벤트로 자동 스크롤 TODO
+        if(scrollX>-1)
+            scrollView.scrollTo(scrollX,scrollY);
     }
 }
