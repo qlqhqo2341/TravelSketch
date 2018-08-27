@@ -116,8 +116,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private GoogleApiClient mGoogleApiClient;
     private PlaceInfo mPlace;
     private Marker mMarker;
+    //시작위치와 끝위치 (거리계산)
     public double start_latitude, start_longitude;
     public double end_latitude, end_longitude;
+    //실수형으로 위치받기(거리계산)
     public float result[] = new float[10];
 
     private boolean needToCurrentLocation=true;
@@ -167,9 +169,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public boolean onOptionsItemSelected(MenuItem menuitem) {
         switch(menuitem.getItemId()){
-            //거리표시
+            //실제 계산에 쓰이는 코드 Location.distanceBetween (거리계산)
             case R.id.action_Distance:
                 Location.distanceBetween(start_latitude, start_longitude, end_latitude, end_longitude, result );
+                //실수형으로 받아온 거리를 문자열로 바꿔주기
                 String str = "목적지까지의 거리는 " +Float.toString(result[0])+" 입니다.";
                 showToast(str);
                 break;
@@ -311,6 +314,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
                                     DEFAULT_ZOOM,
                                     "현위치");
+                            //시작위치 넣어주기(거리계산)
                             start_latitude = currentLocation.getLatitude();
                             start_longitude = currentLocation.getLongitude();
 
@@ -330,6 +334,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         Log.d(TAG, "moveCamera: moving the camera to: lat: " + latLng.latitude + ", lng: " + latLng.longitude );
 
         //Location.distanceBetween(latLng.latitude, latLng.longitude, end_latitude, end_longitude, result );
+
+        //끝위치 넣어주기(거리계산)
         end_latitude = latLng.latitude;
         end_longitude = latLng.longitude;
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
@@ -364,6 +370,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private void moveCamera(LatLng latLng, float zoom, String title){
         Log.d(TAG, "moveCamera: moving the camera to: lat: " + latLng.latitude + ", lng: " + latLng.longitude );
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
+        //끝위치 넣어주기 (거리계산)
         end_latitude = latLng.latitude;
         end_longitude = latLng.longitude;
         if(!title.equals("My Location")){
