@@ -33,7 +33,7 @@ public class ListDataActivity extends AppCompatActivity {
         setContentView(R.layout.activity_note_list);
         mListView = (ListView) findViewById(R.id.listView);
         mDatabaseHelper = new DatabaseHelper(this);
-        getSupportActionBar().setTitle("여행노트ㅇ");
+        getSupportActionBar().setTitle("여행노트");
 
         populateListView();
 
