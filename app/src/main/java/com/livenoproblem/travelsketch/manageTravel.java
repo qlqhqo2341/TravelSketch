@@ -98,6 +98,9 @@ public class manageTravel extends AppCompatActivity implements View.OnClickListe
         trav = (Travel) receive.getSerializableExtra("travel");
         LayoutToEvent = new HashMap<LinearLayout, Event>();
         initGrid();
+
+
+
     }
 
     public static Bitmap loadBitmapFromView(View v)

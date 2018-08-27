@@ -14,6 +14,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
@@ -22,7 +24,6 @@ import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -115,7 +116,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private GoogleApiClient mGoogleApiClient;
     private PlaceInfo mPlace;
     private Marker mMarker;
-
+    public double start_latitude, start_longitude;
+    public double end_latitude, end_longitude;
+    public float result[] = new float[10];
 
     private boolean needToCurrentLocation=true;
     @Override
@@ -126,7 +129,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mGps = (ImageView) findViewById(R.id.gps);
         mInfo = (ImageView) findViewById(R.id.place_info);
         mPlacePicker = (ImageView) findViewById(R.id.place_picker);
-
         getLocationPermission();
 
         //인텐트에 위치정보가 있는지 확인하고 움직이기.
@@ -149,7 +151,32 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     }
                 }
             });
+
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.note_menu, menu);
+
+        MenuItem Distance = menu.findItem(R.id.action_Distance);
+        Distance.setVisible(true);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuitem) {
+        switch(menuitem.getItemId()){
+            //거리표시
+            case R.id.action_Distance:
+                Location.distanceBetween(start_latitude, start_longitude, end_latitude, end_longitude, result );
+                String str = "목적지까지의 거리는 " +Float.toString(result[0])+" 입니다.";
+                showToast(str);
+                break;
+            default:
+                return super.onOptionsItemSelected(menuitem);
+        }
+        return true;
     }
 
     private void init(){
@@ -284,6 +311,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
                                     DEFAULT_ZOOM,
                                     "현위치");
+                            start_latitude = currentLocation.getLatitude();
+                            start_longitude = currentLocation.getLongitude();
 
                         }else{
                             Log.d(TAG, "현재의 위치는 찾을수 없습니다.");
@@ -299,6 +328,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private void moveCamera(LatLng latLng, float zoom, PlaceInfo placeInfo){
         Log.d(TAG, "moveCamera: moving the camera to: lat: " + latLng.latitude + ", lng: " + latLng.longitude );
+
+        //Location.distanceBetween(latLng.latitude, latLng.longitude, end_latitude, end_longitude, result );
+        end_latitude = latLng.latitude;
+        end_longitude = latLng.longitude;
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
 
         mMap.clear();
@@ -331,7 +364,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private void moveCamera(LatLng latLng, float zoom, String title){
         Log.d(TAG, "moveCamera: moving the camera to: lat: " + latLng.latitude + ", lng: " + latLng.longitude );
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
-
+        end_latitude = latLng.latitude;
+        end_longitude = latLng.longitude;
         if(!title.equals("My Location")){
             MarkerOptions options = new MarkerOptions()
                     .position(latLng)
@@ -454,4 +488,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             places.release();
         }
     };
+
+
+
+    //토스트메시지
+
+    public void showToast(String message)
+    {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
 }

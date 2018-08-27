@@ -29,4 +29,11 @@
         android:title="저장"
         android:visible="false"
         app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_Distance"
+        android:icon="@drawable/ic_flag"
+        android:title="저장"
+        android:visible="false"
+        app:showAsAction="always" />
 </menu>
