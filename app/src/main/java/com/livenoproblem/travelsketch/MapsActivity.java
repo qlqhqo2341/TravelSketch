@@ -173,7 +173,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             case R.id.action_Distance:
                 Location.distanceBetween(start_latitude, start_longitude, end_latitude, end_longitude, result );
                 //실수형으로 받아온 거리를 문자열로 바꿔주기
-                String str = "목적지까지의 거리는 " +Float.toString(result[0])+" 입니다.";
+                String str = "목적지까지의 거리는 " +String.format("%.0f",(result[0]))+"m 입니다.";
                 showToast(str);
                 break;
             default:
