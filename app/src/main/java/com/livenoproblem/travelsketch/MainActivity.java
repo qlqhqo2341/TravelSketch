@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 Intent intent = new Intent(getApplicationContext(), manageTravel.class);
                 intent.putExtra("travel",trav);
                 startActivityForResult(intent,MANAGE_TRAVEL);
-                showToast("일정추가");
+                showToast("일정관리");
             }
         });
 

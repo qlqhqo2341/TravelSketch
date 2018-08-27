@@ -62,7 +62,7 @@ public class manageEvent extends AppCompatActivity implements View.OnClickListen
     private PlaceArrayAdapter mPlaceArrayAdapter;
     private GoogleApiClient mGoogleApiClient;
     static String lastLocationId=null,lastLocationDescription = null;
-    static String lastAct="자가용 이동 | 렌트카 이동 | 저녁식사 | 장보기";
+    static String lastAct="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

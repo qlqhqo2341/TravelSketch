@@ -31,6 +31,7 @@ public class EditDataActivity extends AppCompatActivity {
         setContentView(R.layout.edit_data_layout);
         editable_item = (EditText) findViewById(R.id.editable_item);
         mDatabaseHelper = new DatabaseHelper(this);
+        getSupportActionBar().setTitle("여행노트 수정");
 
         //ListDataActivity 인텐트얻기
         Intent receivedIntent = getIntent();
@@ -43,7 +44,6 @@ public class EditDataActivity extends AppCompatActivity {
 
         //현재 선택한 이름을 표시
         editable_item.setText(selectedName);
-
 
     }
 

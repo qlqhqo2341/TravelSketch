@@ -191,7 +191,7 @@
             app:fab_colorNormal="#ffffff"
             app:fab_colorPressed="#ffffff"
             app:fab_size="mini"
-            app:fab_title="일정추가" />
+            app:fab_title="일정관리" />
 
 
         //버튼 3 목적지찾기 버튼

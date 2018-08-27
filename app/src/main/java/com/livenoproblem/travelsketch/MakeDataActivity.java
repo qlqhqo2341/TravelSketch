@@ -23,6 +23,7 @@ public class MakeDataActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note_write);
+        getSupportActionBar().setTitle("여행노트 추가");
         editText = (EditText) findViewById(R.id.editText);
         mDatabaseHelper = new DatabaseHelper(this);
 
