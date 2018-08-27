@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -213,6 +214,7 @@ public class manageTravel extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
+        Location prevLocation = new Location("");
         if(view==findViewById(R.id.addEventBtn)) {
             Intent intent = new Intent(getApplicationContext(), manageEvent.class);
             intent.putExtra("command",manageEvent.ADD_EVENT);
@@ -222,12 +224,13 @@ public class manageTravel extends AppCompatActivity implements View.OnClickListe
         }
         if(view.getClass() == LinearLayout.class){
             Intent intent = new Intent(getApplicationContext(), manageEvent.class);
-            intent.putExtra("command",manageEvent.MANAGE_EVENT);
 
             Event e = LayoutToEvent.get(view);
-            intent.putExtra("event",e);
             managing=e;
-            trav.removeEvent(managing);
+            intent.putExtra("command",manageEvent.MANAGE_EVENT);
+            intent.putExtra("event",e);
+            trav.removeEvent(e);
+            intent.putExtra("travel",trav);
             startActivityForResult(intent,manageEvent.MANAGE_EVENT);
         }
     }

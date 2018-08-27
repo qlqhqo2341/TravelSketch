@@ -3,6 +3,7 @@ package com.livenoproblem.travelsketch;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -23,11 +24,15 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.location.places.GeoDataClient;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceBuffer;
+import com.google.android.gms.location.places.PlaceBufferResponse;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.livenoproblem.travelsketch.Struct.Event;
 import com.livenoproblem.travelsketch.Struct.PlaceArrayAdapter;
 import com.livenoproblem.travelsketch.Struct.Space;
@@ -50,6 +55,7 @@ public class manageEvent extends AppCompatActivity implements View.OnClickListen
 
     Calendar startTime,endTime;
     String spaceId, spaceDescription;
+    Location nowLocation=null;
     TextView actText;
 
     Button startTimeBtn,endTimeBtn,spaceBtn;
@@ -94,7 +100,7 @@ public class manageEvent extends AppCompatActivity implements View.OnClickListen
         Intent receiveIntent = getIntent();
         commandCode=receiveIntent.getIntExtra("command",-1);
         if(commandCode==-1){ Log.e("manageEvent","get wrong commandCode"); commandCode=ADD_EVENT;}
-        trav = (commandCode==ADD_EVENT) ? (Travel)receiveIntent.getSerializableExtra("travel") : null;
+        trav = (Travel)receiveIntent.getSerializableExtra("travel");
         event = (commandCode==MANAGE_EVENT) ? (Event)receiveIntent.getSerializableExtra("event") : null;
         actionBar.setTitle((commandCode==ADD_EVENT) ? "이벤트 추가" : "이벤트 수정");
 
@@ -135,9 +141,51 @@ public class manageEvent extends AppCompatActivity implements View.OnClickListen
             CharSequence attributions = places.getAttributions();
             spaceId = place.getId();
             spaceDescription = place.getName().toString();
-
+            nowLocation = new Location("");
+            nowLocation.setLatitude(place.getLatLng().latitude);
+            nowLocation.setLongitude(place.getLatLng().longitude);
+            getGuessDistance();
         }
     };
+
+    private void getGuessDistance(){
+        Log.d("guessdistance","start");
+        final TextView distanceText = findViewById(R.id.distanceText);
+        final Event prev=trav.getSpaceEventBefore(startTime);
+        if(prev==null){
+            distanceText.setText("위치가 있는 이전 이벤트가 존재하지 않음.");
+            return;
+        }
+        if(prev.getSpace()==null){
+            distanceText.setText("이전 위치가 존재하지 않음");
+            return;
+        }
+        if(nowLocation==null || spaceId==null){
+            distanceText.setText("현재 위치를 설정하지 않았음");
+            return;
+        }
+        if(spaceId.equals(prev.getSpace().id)){
+            distanceText.setText("이전 이벤트와 같은 위치입니다.");
+            return;
+        }
+        GeoDataClient geoDataClient = Places.getGeoDataClient(this,null);
+        geoDataClient.getPlaceById(prev.getSpace().id).addOnCompleteListener(new OnCompleteListener<PlaceBufferResponse>() {
+            @Override
+            public void onComplete(@NonNull Task<PlaceBufferResponse> task) {
+                if(!task.isSuccessful())
+                    return;
+                PlaceBufferResponse response = task.getResult();
+                Place place = response.get(0);
+                Location prevLocation = new Location("");
+                prevLocation.setLongitude(place.getLatLng().longitude);
+                prevLocation.setLatitude(place.getLatLng().latitude);
+                float distance = prevLocation.distanceTo(nowLocation);
+                distanceText.setText(
+                        String.format("%s와\n직선거리:%.1fkm",prev.getSpace().description,distance*0.001f)
+                );
+            }
+        });
+    }
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
@@ -183,6 +231,24 @@ public class manageEvent extends AppCompatActivity implements View.OnClickListen
                 actText.setText(event.getAction());
                 break;
         }
+        if(spaceId==null)
+            nowLocation=null;
+        else{
+            GeoDataClient geoDataClient = Places.getGeoDataClient(this,null);
+            geoDataClient.getPlaceById(spaceId).addOnCompleteListener(new OnCompleteListener<PlaceBufferResponse>() {
+                @Override
+                public void onComplete(@NonNull Task<PlaceBufferResponse> task) {
+                    if(!task.isSuccessful())
+                        return;
+                    Place place = task.getResult().get(0);
+                    LatLng placeLatLng = place.getLatLng();
+                    nowLocation = new Location("");
+                    nowLocation.setLatitude(placeLatLng.latitude);
+                    nowLocation.setLongitude(placeLatLng.longitude);
+                    getGuessDistance();
+                }
+            });
+        }
     }
 
     private static String convertTimeToString(Calendar c){
@@ -200,6 +266,7 @@ public class manageEvent extends AppCompatActivity implements View.OnClickListen
         start.setText(convertTimeToString(startTime));
         end.setText(convertTimeToString(endTime));
         spaceText.setText(spaceDescription);
+        getGuessDistance();
     }
 
     private Travel getAddResult(){
@@ -271,7 +338,7 @@ public class manageEvent extends AppCompatActivity implements View.OnClickListen
         if (control == startTime){
             if(endTime.compareTo(startTime)<=0){
                 endTime = (Calendar)startTime.clone();
-                endTime.add(Calendar.HOUR_OF_DAY,2);
+                endTime.add(Calendar.HOUR_OF_DAY,1);
             }
         }
         displayData();

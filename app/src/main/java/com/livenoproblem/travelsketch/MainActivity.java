@@ -505,7 +505,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         }
 
         for(Event e : trav.getEvents()){
-            if(e.compareTimeTo(now)>0)
+            if(e.compareTimeTo(now)<0)
                 continue; //이미 종료된 이벤트는 표시하지 않음.
 
             if(prev==null || Event.compareDate(prev.getStartTime(),e.getStartTime())!=0){

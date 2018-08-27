@@ -24,7 +24,7 @@ public class Event implements Serializable, Comparable<Event>{
         startTime = Calendar.getInstance();
         startTime.set(Calendar.SECOND,0);
         endTime = (Calendar)startTime.clone();
-        endTime.add(Calendar.SECOND,3);
+        endTime.add(Calendar.HOUR_OF_DAY,2);
         space = null;
         action = "default";
     }
@@ -109,16 +109,16 @@ public class Event implements Serializable, Comparable<Event>{
         //시간을 기준으로 이벤트의 상태를 반환
         //시작전 -1, 진행중 0, 종료후 1
 
-        boolean overStart = now.compareTo(startTime)>=0,
-                overEnd = now.compareTo(endTime)>=0;
-        if(!overStart && !overEnd)
+        boolean isNowOverStart = now.compareTo(startTime)>=0,
+                isNowOverEnd = now.compareTo(endTime)>=0;
+        if(isNowOverStart && isNowOverEnd)
             return -1;
-        else if(overStart && overEnd)
+        else if(!isNowOverStart && !isNowOverEnd)
             return 1;
-        else if(overStart && !overEnd)
+        else if(isNowOverStart && !isNowOverEnd)
             return 0;
         else{
-            Log.e("Event","guess to end time is before start.");
+            Log.e("Event","guess to end time is before start. Compare is " + (endTime.compareTo(startTime)>0? "Cool" :" Wrong"));
             return 0;
         }
     }

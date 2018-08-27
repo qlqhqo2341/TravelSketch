@@ -1,7 +1,18 @@
 package com.livenoproblem.travelsketch.Struct;
 
+import android.content.Context;
+import android.location.Location;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.google.android.gms.location.places.GeoDataClient;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.PlaceBufferResponse;
+import com.google.android.gms.location.places.Places;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.livenoproblem.travelsketch.manageEvent;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -24,6 +35,7 @@ public class Travel implements Serializable{
         int i;
         for(i=0;i<=events.size();i++){
             boolean prevCond,nextCond;
+
             prevCond = i==0 || events.get(i-1).getEndTime().compareTo(newbieStarttime) <= 0;
             nextCond = i==events.size() || events.get(i).getStartTime().compareTo(newbieEndtime) >= 0;
 
@@ -72,6 +84,17 @@ public class Travel implements Serializable{
         return true;
     }
 
+    public Event getSpaceEventBefore(Calendar startTime){
+        Event beforeEvent = null;
+        for(Event e : events){
+            if(e.compareTimeTo(startTime)>=0)
+                break;
+            if(e.getSpace()!=null)
+                beforeEvent=e;
+        }
+        Log.d("TravelBefore hasit",(beforeEvent!=null)? "Yes":"no");
+        return beforeEvent;
+    }
     public Calendar getContinuousLastTime(){
         Event prev = null;
         if(events.size()==0)
@@ -89,8 +112,11 @@ public class Travel implements Serializable{
     }
 
     public Calendar getLastTime(){
-        if(events.isEmpty())
-            return new GregorianCalendar();
+        if(events.isEmpty()){
+            Calendar c = new GregorianCalendar();
+            c.set(Calendar.SECOND,0);
+            return c;
+        }
         return events.get(events.size()-1).getEndTime();
     }
 }
