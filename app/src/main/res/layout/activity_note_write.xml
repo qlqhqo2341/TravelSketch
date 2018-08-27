@@ -14,13 +14,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/relativeLayout1">
+
         <EditText
-            android:layout_marginTop="100dp"
-            android:textAlignment="center"
+            android:id="@+id/editText"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="100dp"
             android:hint="내용을 입력해주세요."
-            android:id="@+id/editText"/>
+            android:inputType="textMultiLine"
+            android:singleLine="false"/>
     </RelativeLayout>
 
     <RelativeLayout

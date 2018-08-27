@@ -60,8 +60,6 @@ public class ListDataActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.action_home:
-                Intent intent1 = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(intent1);
                 finish();
                 break;
             default:

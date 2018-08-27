@@ -3,8 +3,10 @@ package com.livenoproblem.travelsketch;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -39,33 +41,29 @@ public class manageTravel extends AppCompatActivity implements View.OnClickListe
 
     Travel trav;
     Event managing=null;
-    private ScrollView container;
+    private LinearLayout container;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_travel);
-        container = (ScrollView)findViewById(R.id.scrollView);
-
+        container = (LinearLayout)findViewById(R.id.eventList);
 
         com.getbase.floatingactionbutton.FloatingActionButton fab1 = findViewById(R.id.fab_action1);
         fab1.setOnClickListener(new View.OnClickListener(){
 
             public void onClick(View v){
                 //캡처
-                container.buildDrawingCache();
-                Bitmap captureView = container.getDrawingCache();
+                Bitmap captureView = loadBitmapFromView(container);
                 FileOutputStream fos;
-
                 try{
+                    String str = Environment.getExternalStorageDirectory().toString();
                     fos = new FileOutputStream(Environment.getExternalStorageDirectory().toString()+"/capture.jpeg");
                     captureView.compress(Bitmap.CompressFormat.JPEG, 100, fos);
                     Toast.makeText(getApplicationContext(), "캡쳐성공!", Toast.LENGTH_LONG).show();
-
                 } catch (FileNotFoundException e){
                     e.printStackTrace();
                     Toast.makeText(getApplicationContext(), "캡쳐실패", Toast.LENGTH_LONG).show();
-
                 }
 
                 //전송부분
@@ -101,6 +99,23 @@ public class manageTravel extends AppCompatActivity implements View.OnClickListe
         LayoutToEvent = new HashMap<LinearLayout, Event>();
         initGrid();
     }
+
+    public static Bitmap loadBitmapFromView(View v)
+    {
+
+        Bitmap b = Bitmap.createBitmap(v.getWidth(), v.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas c = new Canvas(b);
+        Drawable bgDrawable = v.getBackground();
+        if(bgDrawable!=null)
+            bgDrawable.draw(c);
+        else
+            c.drawColor(Color.WHITE);
+        v.draw(c);
+        return b;
+    }
+
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

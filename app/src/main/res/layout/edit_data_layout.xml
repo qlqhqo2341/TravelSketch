@@ -7,15 +7,15 @@
 
 
     <EditText
-        android:textAlignment="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
         android:ems="10"
         android:hint="내용을 입력해주세요."
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="78dp"
+        android:inputType="textMultiLine"
+        android:singleLine="false"
         android:id="@+id/editable_item"/>
 
 
