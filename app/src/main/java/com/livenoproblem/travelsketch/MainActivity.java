@@ -504,7 +504,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             return;
         }
 
-        for(Event e : trav.getEvents()){
+        for(final Event e : trav.getEvents()){
             if(e.compareTimeTo(now)<0)
                 continue; //이미 종료된 이벤트는 표시하지 않음.
 
@@ -524,7 +524,15 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                     e.getAction()));
             eventView.setTextColor(Color.BLACK);
             eventView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-            eventView.setOnClickListener(new eventClickListener(e));
+            if(e.getSpace()!=null)
+                eventView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+                        intent.putExtra("space",e.getSpace());
+                        startActivity(intent);
+                    }
+                });
             if(e.compareTimeTo(now)==0)
                 eventView.setTextColor(Color.MAGENTA);
             scrollLayout.addView(eventView);
@@ -537,20 +545,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             textView.setText("모든 이벤트가 완료 되었습니다.");
             textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             scrollLayout.addView(textView);
-        }
-    }
-    private class eventClickListener implements View.OnClickListener{
-        Event e;
-        public eventClickListener(Event e){
-            this.e=e;
-        }
-
-        @Override
-        public void onClick(View view) {
-            Intent intent = new Intent(MainActivity.this, MapsActivity.class);
-            if(e!=null)
-                intent.putExtra("space",e.getSpace());
-            startActivity(intent);
         }
     }
 }

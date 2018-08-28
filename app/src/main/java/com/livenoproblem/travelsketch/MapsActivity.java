@@ -78,8 +78,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap = googleMap;
 
         if (mLocationPermissionsGranted) {
-            if(getIntent().getSerializableExtra("space")==null)
-                getDeviceLocation();
+            getDeviceLocation();
 
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                     != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
@@ -311,9 +310,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             Log.d(TAG, "위치발견");
                             Location currentLocation = (Location) task.getResult();
 
-                            moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
-                                    DEFAULT_ZOOM,
-                                    "현위치");
+                            //인텐트에 위치가 존재하지 않을 때만 현재위치를 표시
+                            if(getIntent().getSerializableExtra("space")==null)
+                                moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
+                                        DEFAULT_ZOOM,
+                                        "현위치");
                             //시작위치 넣어주기(거리계산)
                             start_latitude = currentLocation.getLatitude();
                             start_longitude = currentLocation.getLongitude();
