@@ -530,6 +530,14 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             scrollLayout.addView(eventView);
             prev=e;
         }
+
+        //모든 이벤트가 완료 되었을 경우
+        if(prev==null){
+            TextView textView = new TextView(this);
+            textView.setText("모든 이벤트가 완료 되었습니다.");
+            textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            scrollLayout.addView(textView);
+        }
     }
     private class eventClickListener implements View.OnClickListener{
         Event e;
