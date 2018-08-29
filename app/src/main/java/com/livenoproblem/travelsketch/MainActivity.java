@@ -217,6 +217,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             }
             locationManager.requestLocationUpdates(provider, 1000, 1, this);
 
+        initMainTravel();
     }
 
     @Override
